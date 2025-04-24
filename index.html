@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -6,74 +5,79 @@
   <title>BEST IF LUCK DIAMOND TOP UP</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background-image: url('background.jpg');
+      font-family: Arial, sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-attachment: fixed;
-      background-position: center;
       color: white;
       text-align: center;
+      padding: 40px;
+    }
+    .logo {
+      max-width: 200px;
+      margin-bottom: 30px;
+    }
+    .content {
+      background: rgba(0, 0, 0, 0.6);
       padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
     }
-    table {
-      width: 90%%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      background-color: rgba(0, 0, 0, 0.6);
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
+    select, input[type="text"], button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
     }
-    th {
+    button {
       background-color: #4CAF50;
-    }
-    input, button {
-      padding: 10px;
-      margin-top: 10px;
-      width: 250px;
-    }
-    #whatsapp {
-      margin-top: 20px;
-      display: block;
-      padding: 10px;
-      background-color: #25D366;
       color: white;
-      text-decoration: none;
-      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Logo" width="200">
-  <h1>BEST IF LUCK DIAMOND TOP UP</h1>
-  <p>আপনার ইউ আই ডি দিন:</p>
-  <input type="text" placeholder="আপনার UID লিখুন"><br>
-  <p>নিচ থেকে ডায়মন্ড প্যাকেজ নির্বাচন করুন:</p>
-  <div id="diamond-list"></div>
-  <br>
-  <a id="whatsapp" href="https://wa.me/8801580495595" target="_blank">WhatsApp-এ যোগাযোগ করুন</a>
+  <img src="logo.png" alt="Logo" class="logo">
+  <div class="content">
+    <h1>BEST IF LUCK DIAMOND TOP UP</h1>
+    <p>Free Fire ডায়মন্ড টপ আপ অর্ডার সম্পন্ন ও বিশ্বাসযোগ্য উপায়ে</p>
 
-  <script>
-  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTR54Vw54EaVDG9Xe5b569M1krtv1NHUt5UXvOGmcolB8mYt22xYXQowBO-uQLdcMKgcecf6IbjPqHB/pub?output=csv')
-    .then(response => response.text())
-    .then(data => {
-      const rows = data.trim().split('\n');
-      const table = document.createElement('table');
-      const tbody = document.createElement('tbody');
-      rows.forEach((row, index) => {
-        const cols = row.split(',');
-        const tr = document.createElement('tr');
-        cols.forEach(col => {
-          const cell = document.createElement(index === 0 ? 'th' : 'td');
-          cell.textContent = col;
-          tr.appendChild(cell);
-        });
-        tbody.appendChild(tr);
-      });
-      table.appendChild(tbody);
-      document.getElementById('diamond-list').appendChild(table);
-    });
-  </script>
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfPj-form-link-example/formResponse" method="POST" target="_blank">
+      <label for="uid">আপনার Free Fire UID দিন:</label><br>
+      <input type="text" name="entry.123456789" id="uid" placeholder="UID দিন" required><br>
+
+      <label for="diamond">ডায়মন্ড প্যাকেজ সিলেক্ট করুন:</label><br>
+      <select name="entry.987654321" id="diamond" required>
+        <option value="25 Diamond = 25 BDT">25 Diamond = 25 BDT</option>
+        <option value="50 Diamond = 38 BDT">50 Diamond = 38 BDT</option>
+        <option value="115 Diamond = 78 BDT">115 Diamond = 78 BDT</option>
+        <option value="240 Diamond = 156 BDT">240 Diamond = 156 BDT</option>
+        <option value="610 Diamond = 390 BDT">610 Diamond = 390 BDT</option>
+        <option value="1240 Diamond = 785 BDT">1240 Diamond = 785 BDT</option>
+        <option value="2530 Diamond = 1575 BDT">2530 Diamond = 1575 BDT</option>
+        <option value="Level UP Pass = 160 BDT">Level UP Pass = 160 BDT</option>
+        <option value="Weekly Membership = 158 BDT">Weekly Membership = 158 BDT</option>
+        <option value="Monthly Membership = 775 BDT">Monthly Membership = 775 BDT</option>
+        <option value="Evo Access 3D = 00 BDT">Evo Access 3D = 00 BDT</option>
+        <option value="Evo Access 7D = 00 BDT">Evo Access 7D = 00 BDT</option>
+        <option value="Evo Access 30D = 00 BDT">Evo Access 30D = 00 BDT</option>
+      </select><br>
+
+      <button type="submit">অর্ডার সাবমিট করুন</button>
+    </form>
+
+    <p>অর্ডার করার পর WhatsApp এ যোগাযোগ করুন:</p>
+    <a href="https://wa.me/8801234567890" target="_blank">
+      <button>WhatsApp এ যান</button>
+    </a>
+  </div>
 </body>
 </html>
