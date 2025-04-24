@@ -1,3 +1,6 @@
+# Update the HTML content to use separate rows for each diamond package and ensure selection works per row
+
+updated_html_content = """
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -22,25 +25,30 @@
       border-radius: 15px;
       display: inline-block;
     }
-    h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-    select, input[type="text"], button {
+    input, button {
+      margin: 10px;
       padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      border: none;
-      border-radius: 5px;
       font-size: 16px;
+      border-radius: 5px;
     }
-    button {
-      background-color: #4CAF50;
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid white;
+      padding: 10px;
+    }
+    .whatsapp {
+      margin-top: 20px;
+      display: inline-block;
+      background-color: #25D366;
       color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -48,36 +56,54 @@
   <img src="logo.png" alt="Logo" class="logo">
   <div class="content">
     <h1>BEST IF LUCK DIAMOND TOP UP</h1>
-    <p>Free Fire ডায়মন্ড টপ আপ অর্ডার সম্পন্ন ও বিশ্বাসযোগ্য উপায়ে</p>
-
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfPj-form-link-example/formResponse" method="POST" target="_blank">
-      <label for="uid">আপনার Free Fire UID দিন:</label><br>
-      <input type="text" name="entry.123456789" id="uid" placeholder="UID দিন" required><br>
-
-      <label for="diamond">ডায়মন্ড প্যাকেজ সিলেক্ট করুন:</label><br>
-      <select name="entry.987654321" id="diamond" required>
-        <option value="25 Diamond = 25 BDT">25 Diamond = 25 BDT</option>
-        <option value="50 Diamond = 38 BDT">50 Diamond = 38 BDT</option>
-        <option value="115 Diamond = 78 BDT">115 Diamond = 78 BDT</option>
-        <option value="240 Diamond = 156 BDT">240 Diamond = 156 BDT</option>
-        <option value="610 Diamond = 390 BDT">610 Diamond = 390 BDT</option>
-        <option value="1240 Diamond = 785 BDT">1240 Diamond = 785 BDT</option>
-        <option value="2530 Diamond = 1575 BDT">2530 Diamond = 1575 BDT</option>
-        <option value="Level UP Pass = 160 BDT">Level UP Pass = 160 BDT</option>
-        <option value="Weekly Membership = 158 BDT">Weekly Membership = 158 BDT</option>
-        <option value="Monthly Membership = 775 BDT">Monthly Membership = 775 BDT</option>
-        <option value="Evo Access 3D = 00 BDT">Evo Access 3D = 00 BDT</option>
-        <option value="Evo Access 7D = 00 BDT">Evo Access 7D = 00 BDT</option>
-        <option value="Evo Access 30D = 00 BDT">Evo Access 30D = 00 BDT</option>
-      </select><br>
-
-      <button type="submit">অর্ডার সাবমিট করুন</button>
-    </form>
-
-    <p>অর্ডার করার পর WhatsApp এ যোগাযোগ করুন:</p>
-    <a href="https://wa.me/8801234567890" target="_blank">
-      <button>WhatsApp এ যান</button>
-    </a>
+    <p>আপনার Free Fire UID লিখুন:</p>
+    <input type="text" id="uid" placeholder="UID লিখুন" required>
+    <table>
+      <tr><th>প্যাকেজ</th><th>মূল্য</th><th>সাবমিট</th></tr>
+      <tr><td>25 Diamond</td><td>25 BDT</td><td><button onclick="submitOrder('25 Diamond - 25 BDT')">নিন</button></td></tr>
+      <tr><td>50 Diamond</td><td>38 BDT</td><td><button onclick="submitOrder('50 Diamond - 38 BDT')">নিন</button></td></tr>
+      <tr><td>115 Diamond</td><td>78 BDT</td><td><button onclick="submitOrder('115 Diamond - 78 BDT')">নিন</button></td></tr>
+      <tr><td>240 Diamond</td><td>156 BDT</td><td><button onclick="submitOrder('240 Diamond - 156 BDT')">নিন</button></td></tr>
+      <tr><td>610 Diamond</td><td>390 BDT</td><td><button onclick="submitOrder('610 Diamond - 390 BDT')">নিন</button></td></tr>
+      <tr><td>1240 Diamond</td><td>785 BDT</td><td><button onclick="submitOrder('1240 Diamond - 785 BDT')">নিন</button></td></tr>
+      <tr><td>2530 Diamond</td><td>1575 BDT</td><td><button onclick="submitOrder('2530 Diamond - 1575 BDT')">নিন</button></td></tr>
+      <tr><td>Level UP Pass</td><td>160 BDT</td><td><button onclick="submitOrder('Level UP Pass - 160 BDT')">নিন</button></td></tr>
+      <tr><td>Weekly Membership</td><td>158 BDT</td><td><button onclick="submitOrder('Weekly Membership - 158 BDT')">নিন</button></td></tr>
+      <tr><td>Monthly Membership</td><td>775 BDT</td><td><button onclick="submitOrder('Monthly Membership - 775 BDT')">নিন</button></td></tr>
+    </table>
+    <div id="whatsapp-link" style="display:none;">
+      <a class="whatsapp" href="#" target="_blank">WhatsApp এ যোগাযোগ করুন</a>
+    </div>
   </div>
+
+  <script>
+    function submitOrder(packageName) {
+      const uid = document.getElementById('uid').value;
+      if (!uid) {
+        alert("UID লিখতে হবে");
+        return;
+      }
+      const whatsappUrl = `https://wa.me/8801234567890?text=UID: ${uid}%0Aপ্যাকেজ: ${packageName}`;
+      document.querySelector('.whatsapp').href = whatsappUrl;
+      document.getElementById('whatsapp-link').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
+"""
+
+# Overwrite the index.html with new content
+new_html_path = "/mnt/data/best_if_luck_site/index.html"
+with open(new_html_path, "w", encoding="utf-8") as f:
+    f.write(updated_html_content)
+
+# Create a new zip with updated HTML
+updated_zip_path = "/mnt/data/BEST_IF_LUCK_SITE_UPDATED.zip"
+with ZipFile(updated_zip_path, 'w') as zipf:
+    for root, dirs, files in os.walk("/mnt/data/best_if_luck_site"):
+        for file in files:
+            full_path = os.path.join(root, file)
+            arcname = os.path.relpath(full_path, "/mnt/data/best_if_luck_site")
+            zipf.write(full_path, arcname)
+
+updated_zip_path
