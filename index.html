@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>BEST IF LUCK DIAMOND TOP UP</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    table {
+      width: 90%%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+    th {
+      background-color: #4CAF50;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 250px;
+    }
+    #whatsapp {
+      margin-top: 20px;
+      display: block;
+      padding: 10px;
+      background-color: #25D366;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <img src="logo.png" alt="Logo" width="200">
+  <h1>BEST IF LUCK DIAMOND TOP UP</h1>
+  <p>আপনার ইউ আই ডি দিন:</p>
+  <input type="text" placeholder="আপনার UID লিখুন"><br>
+  <p>নিচ থেকে ডায়মন্ড প্যাকেজ নির্বাচন করুন:</p>
+  <div id="diamond-list"></div>
+  <br>
+  <a id="whatsapp" href="https://wa.me/8801580495595" target="_blank">WhatsApp-এ যোগাযোগ করুন</a>
+
+  <script>
+  fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTR54Vw54EaVDG9Xe5b569M1krtv1NHUt5UXvOGmcolB8mYt22xYXQowBO-uQLdcMKgcecf6IbjPqHB/pub?output=csv')
+    .then(response => response.text())
+    .then(data => {
+      const rows = data.trim().split('\n');
+      const table = document.createElement('table');
+      const tbody = document.createElement('tbody');
+      rows.forEach((row, index) => {
+        const cols = row.split(',');
+        const tr = document.createElement('tr');
+        cols.forEach(col => {
+          const cell = document.createElement(index === 0 ? 'th' : 'td');
+          cell.textContent = col;
+          tr.appendChild(cell);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      document.getElementById('diamond-list').appendChild(table);
+    });
+  </script>
+</body>
+</html>
