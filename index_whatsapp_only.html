@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEST IF LUCK DIAMOND TOP UP</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #111;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    header h1 {
+      color: #ffcc00;
+      font-size: 28px;
+    }
+    .uid-input {
+      margin: 30px 20px;
+    }
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      width: 250px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    .diamond-list {
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: left;
+    }
+    .diamond-item {
+      background: #1e1e2f;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin: 12px 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      transition: transform 0.2s;
+    }
+    .diamond-item:hover {
+      transform: scale(1.03);
+      background-color: #292945;
+    }
+    .diamond-item input {
+      margin-right: 10px;
+    }
+    .submit-section {
+      margin: 30px 0;
+    }
+    .submit-section button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .submit-section button:hover {
+      background-color: #e6b800;
+    }
+    .whatsapp {
+      margin-top: 30px;
+    }
+    .whatsapp a {
+      display: inline-block;
+      padding: 15px 25px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .whatsapp a:hover {
+      background: #1da851;
+    }
+    .image-banner img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-bottom: 4px solid #ffcc00;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BEST IF LUCK DIAMOND TOP UP</h1>
+  </header>
+
+  <div class="image-banner">
+    <img src="https://cdn.wallpapersafari.com/19/43/3MRV9u.jpg" alt="Free Fire">
+  </div>
+
+  <div class="uid-input">
+    <label for="uid">আপনার ফ্রি ফায়ার UID দিন:</label><br>
+    <input type="text" id="uid" name="uid" placeholder="UID লিখুন">
+  </div>
+
+  <form id="diamondForm">
+    <div class="diamond-list" id="diamondList">
+      <h2>ডায়মন্ড প্যাকেজ</h2>
+      <p>লোড হচ্ছে...</p>
+    </div>
+
+    <div class="submit-section">
+      <button type="submit">সাবমিট করুন</button>
+    </div>
+  
+    </form>
+    <div id="paymentSection" style="display:none; margin-top: 20px;">
+      <h3>✅ অর্ডার সাবমিট হয়েছে</h3>
+      <p>অনুগ্রহ করে নিচের বাটনে ক্লিক করে WhatsApp-এ যোগাযোগ করুন।</p>
+      <a href="https://wa.me/8801580495595" target="_blank" style="display:inline-block;padding:12px 25px;background:#25D366;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:10px;">WhatsApp-এ যোগাযোগ করুন</a>
+    </div>
+    
+
+  <div class="whatsapp">
+    <a href="https://wa.me/8801580495595" target="_blank">WhatsApp-এ যোগাযোগ করুন</a>
+  </div>
+
+  <script>
+    async function fetchDataFromSheet() {
+      const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS0tgsEzWp6zUYpH8uR-_cC-uRHUkaFWnQ8X9lEZ0AFhU5hVZBqpDE4MwPvDN9dcZ-kk_KlVE_yO5ZG/pub?output=csv';
+      const response = await fetch(url);
+      const data = await response.text();
+      const rows = data.split('\n').slice(1);
+      const container = document.getElementById('diamondList');
+      container.innerHTML = '';
+      rows.forEach((row, index) => {
+        const [name, amount, price] = row.split(',');
+        if (name && amount && price) {
+          container.innerHTML += `
+            <div class="diamond-item">
+              <label>
+                <input type="radio" name="diamond" value="${name.trim()} - ${amount.trim()} - ${price.trim()}">
+                <strong>${name.trim()}</strong> | পরিমাণ: ${amount.trim()} | দাম: ${price.trim()} টাকা
+              </label>
+            </div>
+          `;
+        }
+      });
+    }
+    fetchDataFromSheet();
+
+    document.getElementById("diamondForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const uid = document.getElementById("uid").value;
+      const diamond = document.querySelector("input[name='diamond']:checked");
+      if (!uid || !diamond) {
+        alert("দয়া করে UID লিখুন এবং একটি ডায়মন্ড প্যাকেজ সিলেক্ট করুন।");
+        return;
+      }
+
+      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeAWGPdCzPHUwv8BQkFtp0Uw1KPCyPQ0_8fqvtXzEPKXHVoRw/formResponse";
+      const formData = new FormData();
+      formData.append("entry.1588962899", uid);
+      formData.append("entry.372957253", diamond.value);
+
+      fetch(formURL, {
+        method: "POST",
+        mode: "no-cors",
+        body: formData
+      }).then(() => {
+        alert("আপনার অর্ডার সাবমিট হয়েছে। WhatsApp-এ যোগাযোগ করুন।");
+        document.getElementById("diamondForm").reset();
+      document.getElementById("paymentSection").style.display = "block";
+      });
+    });
+  </script>
+</body>
+</html>
