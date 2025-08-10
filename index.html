@@ -44,13 +44,10 @@
 <body>
   <div class="container">
     <h2>BEST OF LUCK DIAMOND TOP UP</h2>
-
     <p>আপনার ফ্রি ফায়ার UID লিখুন:</p>
-    <input type="number" id="uid" placeholder="UID (শুধু সংখ্যা)" required oninput="fetchName(this.value)" />
-
+    <input type="text" id="uid" placeholder="UID (শুধু সংখ্যা)" required oninput="fetchName(this.value)" />
     <p>প্লেয়ারের নাম:</p>
     <input type="text" id="playerName" placeholder="নাম অটোমেটিক আসবে" readonly />
-
     <p>প্যাকেজ সিলেক্ট করুন:</p>
     <select id="diamondSelect">
       <option value="25 Diamond = 25 BDT">25 Diamond = 25 BDT</option>
@@ -64,17 +61,14 @@
       <option value="850 Diamond = 546 BDT">850 Diamond = 546 BDT</option>
       <option value="1090 Diamond = 700 BDT">1090 Diamond = 700 BDT</option>
     </select>
-
     <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
     <select id="paymentMethod" required>
       <option value="" disabled selected>-- নির্বাচন করুন --</option>
       <option value="Bkash/Nagad = 01580495595">Bkash/Nagad = 01580495595</option>
       <option value="Cash on Delivery">Cash on Delivery</option>
     </select>
-
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
-
     <button onclick="submitOrder()">সাবমিট করুন</button>
   </div>
 
@@ -86,9 +80,13 @@
         return;
       }
       try {
-        const res = await fetch(`getname.php?uid=${uid}`);
-        const data = await res.json();
-        document.getElementById('playerName').value = data.name || "নাম পাওয়া যায়নি";
+        // JSON ফাইল থেকে নাম সংগ্রহ
+        const res = await fetch('/data/players.json');
+        const players = await res.json();
+        
+        // UID অনুযায়ী নাম দেখানো
+        const name = players[uid] || "নাম পাওয়া যায়নি";
+        document.getElementById('playerName').value = name;
       } catch (e) {
         document.getElementById('playerName').value = "ত্রুটি হয়েছে";
       }
