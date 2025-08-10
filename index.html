@@ -218,48 +218,60 @@
     <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" autocomplete="off" required />
 
     <p>প্যাকেজ সিলেক্ট করুন:</p>
-    <select id="diamondSelect" multiple size="15" required onchange="calculateTotal()">
-      <!-- Diamond Packages -->
-      <option data-price="25">25 Diamond = 25 BDT</option>
-      <option data-price="40">50 Diamond = 40 BDT</option>
-      <option data-price="82">115 Diamond = 82 BDT</option>
-      <option data-price="160">240 Diamond = 160 BDT</option>
-      <option data-price="240">355 Diamond = 240 BDT</option>
-      <option data-price="316">480 Diamond = 316 BDT</option>
-      <option data-price="340">505 Diamond = 340 BDT</option>
-      <option data-price="392">610 Diamond = 392 BDT</option>
-      <option data-price="550">850 Diamond = 550 BDT</option>
-      <option data-price="700">1090 Diamond = 700 BDT</option>
-      <option data-price="775">1240 Diamond = 775 BDT</option>
-      <option data-price="1567">2530 Diamond = 1567 BDT</option>
-      <option data-price="3124">5060 Diamond = 3124 BDT</option>
-      <option data-price="6240">10120 Diamond = 6240 BDT</option>
+    <!-- Diamond Packages -->
+<p>Diamond Packages:</p>
+<select id="diamondSelect" multiple size="10" onchange="calculateTotal()">
+  <option data-price="25">25 Diamond = 25 BDT</option>
+  <option data-price="40">50 Diamond = 40 BDT</option>
+  <option data-price="82">115 Diamond = 82 BDT</option>
+  <option data-price="160">240 Diamond = 160 BDT</option>
+  <option data-price="240">355 Diamond = 240 BDT</option>
+  <option data-price="316">480 Diamond = 316 BDT</option>
+  <option data-price="340">505 Diamond = 340 BDT</option>
+  <option data-price="392">610 Diamond = 392 BDT</option>
+  <option data-price="550">850 Diamond = 550 BDT</option>
+  <option data-price="700">1090 Diamond = 700 BDT</option>
+  <option data-price="775">1240 Diamond = 775 BDT</option>
+  <option data-price="1567">2530 Diamond = 1567 BDT</option>
+  <option data-price="3124">5060 Diamond = 3124 BDT</option>
+  <option data-price="6240">10120 Diamond = 6240 BDT</option>
+</select>
 
-      <!-- Level Up Packages -->
-      <option data-price="39">☞ Level Up-6   ➪ 39 BDT</option>
-      <option data-price="67">☞ Level Up-10 ➪ 67 BDT</option>
-      <option data-price="67">☞ Level Up-15 ➪ 67 BDT</option>
-      <option data-price="67">☞ Level Up-20 ➪ 67 BDT</option>
-      <option data-price="67">☞ Level Up-25 ➪ 67 BDT</option>
-      <option data-price="95">☞ Level Up-30 ➪ 95 BDT</option>
-      <option data-price="390">☞ Level Up pass full 1270 DM ➪ 390 BDT</option>
+<!-- Weekly & Monthly Packages -->
+<p>Weekly & Monthly Packages:</p>
+<select id="weeklyMonthlySelect" multiple size="10" onchange="calculateTotal()">
+  <option data-price="768">🗓️ Monthly = 768 BDT</option>
+  <option data-price="1530">🗓️ Monthly 2x = 1530 BDT</option>
+  <option data-price="165">📅 Weekly = 165 BDT</option>
+  <option data-price="325">📅 Weekly 2x = 325 BDT</option>
+  <option data-price="485">📅 Weekly 3x = 485 BDT</option>
+  <option data-price="630">📅 Weekly 4x = 630 BDT</option>
+  <option data-price="785">📅 Weekly 5x = 785 BDT</option>
+  <option data-price="43">📅 Weekly Lite = 43 BDT</option>
+  <option data-price="85">📅 2X Weekly Lite = 85 BDT</option>
+  <option data-price="127">📅 3X Weekly Lite = 127 BDT</option>
+  <option data-price="210">📅 5X Weekly Lite = 210 BDT</option>
+</select>
 
-      <!-- Monthly & Weekly Packages -->
-      <option data-price="768">🗓️ Monthly = 768 BDT</option>
-      <option data-price="1530">🗓️ Monthly 2x = 1530 BDT</option>
-      <option data-price="165">📅 Weekly = 165 BDT</option>
-      <option data-price="325">📅 Weekly 2x = 325 BDT</option>
-      <option data-price="485">📅 Weekly 3x = 485 BDT</option>
-      <option data-price="630">📅 Weekly 4x = 630 BDT</option>
-      <option data-price="785">📅 Weekly 5x = 785 BDT</option>
-      <option data-price="43">📅 Weekly Lite = 43 BDT</option>
-      <option data-price="85">📅 2X Weekly Lite = 85 BDT</option>
-      <option data-price="127">📅 3X Weekly Lite = 127 BDT</option>
-      <option data-price="210">📅 5X Weekly Lite = 210 BDT</option>
-      <option data-price="70">🎟️ 3 Days Evo Access = 70 BDT</option>
-      <option data-price="107">🎟️ 7 Days Evo Access = 107 BDT</option>
-      <option data-price="308">🎟️ 30 Days Evo Access = 308 BDT</option>
-    </select>
+<!-- Level Up Packages -->
+<p>Level Up Packages:</p>
+<select id="levelUpSelect" multiple size="7" onchange="calculateTotal()">
+  <option data-price="39">☞ Level Up-6   ➪ 39 BDT</option>
+  <option data-price="67">☞ Level Up-10 ➪ 67 BDT</option>
+  <option data-price="67">☞ Level Up-15 ➪ 67 BDT</option>
+  <option data-price="67">☞ Level Up-20 ➪ 67 BDT</option>
+  <option data-price="67">☞ Level Up-25 ➪ 67 BDT</option>
+  <option data-price="95">☞ Level Up-30 ➪ 95 BDT</option>
+  <option data-price="390">☞ Level Up pass full 1270 DM ➪ 390 BDT</option>
+</select>
+
+<!-- Evo Access -->
+<p>Evo Access Packages:</p>
+<select id="evoAccessSelect" multiple size="3" onchange="calculateTotal()">
+  <option data-price="70">🎟️ 3 Days Evo Access = 70 BDT</option>
+  <option data-price="107">🎟️ 7 Days Evo Access = 107 BDT</option>
+  <option data-price="308">🎟️ 30 Days Evo Access = 308 BDT</option>
+</select>
 
     <p style="font-size: 13px; color: red; margin-top: 5px;">
       বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে
