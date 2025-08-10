@@ -478,12 +478,10 @@ ${selectedDiamonds}
 📋 পেমেন্ট ডিটেইলস:
 ${paymentDetails}
 ⏰ অর্ডারের সময়: ${orderTime}`;
-const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
-window.open(whatsappUrl, '_blank');
-
-
       // সফল বার্তা দেখান
       thankYouMessage.textContent = 'অর্ডার সফল হয়েছে, ধন্যবাদ! মাসুদের পক্ষ থেকে শুভকামনা';
+const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
+window.open(whatsappUrl, '_blank');
 
       // ফর্ম রিসেট করুন
       document.getElementById('uid').value = '';
