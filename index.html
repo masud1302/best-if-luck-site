@@ -93,7 +93,10 @@
       const uid = document.getElementById('uid').value;
       const name = document.getElementById('playerName').value;
       const diamondSelect = document.getElementById('diamondSelect');
-      const selectedDiamonds = Array.from(diamondSelect.selectedOptions).map(option => option.value).join(', ');
+      const selectedDiamonds = Array.from(diamondSelect.selectedOptions)
+                                     .map((option, index) => `${index + 1}. ${option.value}`)
+                                     .join('\n');  // নতুন লাইনে সিলেক্ট করা প্যাকেজগুলি
+
       const payment = document.getElementById('paymentMethod').value;
       const orderTime = document.getElementById('orderTime').value;
 
@@ -110,7 +113,7 @@
         return;
       }
 
-      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ: ${selectedDiamonds}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
+      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ:\n${selectedDiamonds}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
       const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
