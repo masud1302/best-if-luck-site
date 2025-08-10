@@ -7,9 +7,10 @@
   <style>
     body {
       background-color: skyblue;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 15px;
+      margin: 0;
     }
     .container {
       background: white;
@@ -19,36 +20,35 @@
       margin: auto;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    select, input, button, textarea {
+    input, select, textarea, button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
       font-size: 16px;
       box-sizing: border-box;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    textarea {
       resize: none;
+      cursor: pointer;
+      font-family: monospace;
+      user-select: all;
+    }
+    input[readonly], textarea[readonly] {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
     }
     button {
       background-color: #28a745;
       color: white;
       border: none;
       cursor: pointer;
-      border-radius: 5px;
       margin-top: 15px;
       transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #218838;
-    }
-    input[readonly], textarea[readonly] {
-      background-color: #f0f0f0;
-      cursor: not-allowed;
-    }
-    .btn-clear {
-      background-color: #dc3545;
-      margin-top: 5px;
-    }
-    .btn-clear:hover {
-      background-color: #c82333;
     }
     #totalPrice {
       margin-top: 15px;
@@ -61,38 +61,35 @@
       border-radius: 5px;
       user-select: none;
     }
-    #levelUpNote {
-      display: none;
-      color: #d9534f;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    #paymentDetails {
-      margin-top: 10px;
-      text-align: left;
-      background: #e2e3e5;
-      border-radius: 5px;
-      padding: 10px;
-      white-space: pre-wrap;
-      font-family: monospace;
-      user-select: all;
-      cursor: pointer;
-    }
     #paymentDetails:hover {
       background: #d6d8db;
     }
-
-    /* মোবাইল ফ্রেন্ডলি */
-    @media (max-width: 600px) {
-      body {
+    #thankYouMessage {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      background: #d4edda;
+      border: 2px solid #c3e6cb;
+      color: #155724;
+      font-size: 1.6rem;
+      font-weight: 700;
+      border-radius: 10px;
+      text-align: center;
+      user-select: none;
+      line-height: 1.5;
+    }
+    @media(max-width: 600px) {
+      body, .container {
+        padding: 10px;
+        margin: 0 5px;
+      }
+      input, select, textarea, button {
+        font-size: 14px;
         padding: 10px;
       }
-      .container {
-        max-width: 100%;
+      #thankYouMessage {
+        font-size: 1.3rem;
         padding: 15px;
-      }
-      select[multiple] {
-        size: 6 !important;
       }
     }
   </style>
@@ -105,64 +102,53 @@
     <input
       type="text"
       id="uid"
-      placeholder="UID (শুধু সংখ্যা, 9-11 ডিজিট)"
-      required
-      oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11)"
-      title="শুধু সংখ্যা লিখুন এবং সর্বোচ্চ ১১ ডিজিট"
-      autocomplete="off"
-      minlength="9"
+      placeholder="UID (শুধু ৯-১১ সংখ্যার)"
       maxlength="11"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+      title="শুধু সংখ্যা লিখুন"
+      autocomplete="off"
+      required
     />
 
     <p>গেমে কি নাম দেয়া আছে?</p>
-    <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" required autocomplete="off" />
+    <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" autocomplete="off" required />
 
     <p>প্যাকেজ সিলেক্ট করুন:</p>
     <select id="diamondSelect" multiple size="8" required onchange="calculateTotal()">
       <option data-price="25">25 Diamond = 25 BDT</option>
-      <option data-price="39">50 Diamond = 39 BDT</option>
+      <option data-price="40">50 Diamond = 40 BDT</option>
       <option data-price="82">115 Diamond = 82 BDT</option>
       <option data-price="160">240 Diamond = 160 BDT</option>
-      <option data-price="236">355 Diamond = 236 BDT</option>
-      <option data-price="312">480 Diamond = 312 BDT</option>
-      <option data-price="330">505 Diamond = 330 BDT</option>
+      <option data-price="240">355 Diamond = 240 BDT</option>
+      <option data-price="316">480 Diamond = 316 BDT</option>
+      <option data-price="340">505 Diamond = 340 BDT</option>
       <option data-price="392">610 Diamond = 392 BDT</option>
-      <option data-price="546">850 Diamond = 546 BDT</option>
+      <option data-price="550">850 Diamond = 550 BDT</option>
       <option data-price="700">1090 Diamond = 700 BDT</option>
-      <option data-price="778">1240 Diamond = 778 BDT</option>
+      <option data-price="775">1240 Diamond = 775 BDT</option>
       <option data-price="1567">2530 Diamond = 1567 BDT</option>
       <option data-price="3124">5060 Diamond = 3124 BDT</option>
       <option data-price="6240">10120 Diamond = 6240 BDT</option>
 
-      <option data-price="775">Monthly = 775 BDT</option>
-      <option data-price="1545">Monthly 2x = 1545 BDT</option>
-      <option data-price="162">Weekly = 162 BDT</option>
-      <option data-price="320">Weekly 2x = 320 BDT</option>
-      <option data-price="481">Weekly 3x = 481 BDT</option>
-      <option data-price="640">Weekly 4x = 640 BDT</option>
-      <option data-price="801">Weekly 5x = 801 BDT</option>
+      <option data-price="768">Monthly = 768 BDT</option>
+      <option data-price="1530">Monthly 2x = 1530 BDT</option>
+      <option data-price="165">Weekly = 165 BDT</option>
+      <option data-price="325">Weekly 2x = 325 BDT</option>
+      <option data-price="485">Weekly 3x = 485 BDT</option>
+      <option data-price="630">Weekly 4x = 630 BDT</option>
+      <option data-price="785">Weekly 5x = 785 BDT</option>
 
       <option data-price="43">Weekly Lite = 43 BDT</option>
       <option data-price="85">2X Weekly Lite = 85 BDT</option>
-      <option data-price="128">3X Weekly Lite = 128 BDT</option>
+      <option data-price="127">3X Weekly Lite = 127 BDT</option>
       <option data-price="210">5X Weekly Lite = 210 BDT</option>
 
       <option data-price="70">3 Days Evo Access = 70 BDT</option>
       <option data-price="107">7 Days Evo Access = 107 BDT</option>
       <option data-price="308">30 Days Evo Access = 308 BDT</option>
-
-      <!-- New Level Up packages -->
-      <option data-price="39">Level Up-6 = 39 BDT</option>
-      <option data-price="67">Level Up-10 = 67 BDT</option>
-      <option data-price="67">Level Up-15 = 67 BDT</option>
-      <option data-price="67">Level Up-20 = 67 BDT</option>
-      <option data-price="67">Level Up-25 = 67 BDT</option>
-      <option data-price="95">Level Up-30 = 95 BDT</option>
-      <option data-price="390">Level Up pass full 1270 DM = 390 BDT</option>
     </select>
 
     <div id="totalPrice">মোট দাম: 0 BDT</div>
-    <div id="levelUpNote">বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে</div>
 
     <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
     <select id="paymentMethod" required onchange="showPaymentDetails()">
@@ -181,18 +167,26 @@
       title="ক্লিক করে কপি করুন"
       onclick="copyPaymentDetails()"
       placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"
-      rows="8"
+      rows="7"
     ></textarea>
+
+    <p>ক্যাপচা (সহজ যোগ): <span id="captchaQuestion"></span></p>
+    <input type="text" id="captchaInput" placeholder="উত্তর লিখুন" autocomplete="off" />
 
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
 
     <button onclick="submitOrder()">সাবমিট করুন</button>
-    <button class="btn-clear" onclick="clearForm()" type="button">ক্লিয়ার করুন</button>
+
+    <div id="thankYouMessage">
+      অর্ডার করার জন্য ধন্যবাদ।<br />
+      মাসুদের পক্ষ থেকে শুভকামনা।
+    </div>
   </div>
 
   <script>
-    // বাংলাদেশ সময় (GMT+6) অনুযায়ী সময় আপডেট
+    let captchaAnswer = 0;
+
     function updateTime() {
       const now = new Date();
       const options = {
@@ -211,31 +205,16 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // মোট দাম হিসাব ও লেভেল আপ নোট দেখানো
     function calculateTotal() {
       const diamondSelect = document.getElementById('diamondSelect');
       let total = 0;
-      let showLevelUpNote = false;
-
       for (const option of diamondSelect.selectedOptions) {
-        total += parseInt(option.getAttribute('data-price'));
-        if (option.textContent.includes("Level Up")) {
-          showLevelUpNote = true;
-        }
+        total += parseInt(option.getAttribute('data-price'), 10) || 0;
       }
       document.getElementById('totalPrice').textContent = `মোট দাম: ${total} BDT`;
-
-      const levelUpNote = document.getElementById('levelUpNote');
-      if (showLevelUpNote) {
-        levelUpNote.style.display = 'block';
-      } else {
-        levelUpNote.style.display = 'none';
-      }
-
       return total;
     }
 
-    // পেমেন্ট মেথড অনুযায়ী ডিটেইল দেখানো
     function showPaymentDetails() {
       const paymentMethod = document.getElementById('paymentMethod').value;
       const paymentDetails = document.getElementById('paymentDetails');
@@ -280,11 +259,10 @@
       paymentDetails.value = detailsText;
     }
 
-    // পেমেন্ট ডিটেইলস কপি ফাংশন
     function copyPaymentDetails() {
       const paymentDetails = document.getElementById('paymentDetails');
       paymentDetails.select();
-      paymentDetails.setSelectionRange(0, 99999); // মোবাইলের জন্য
+      paymentDetails.setSelectionRange(0, 99999);
       navigator.clipboard.writeText(paymentDetails.value).then(
         () => {
           alert('পেমেন্ট ডিটেইল কপি করা হয়েছে!');
@@ -295,15 +273,27 @@
       );
     }
 
-    // সাবমিট ফাংশন
+    function generateCaptcha() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      captchaAnswer = a + b;
+      document.getElementById('captchaQuestion').textContent = `${a} + ${b} = ?`;
+      document.getElementById('captchaInput').value = '';
+    }
+    generateCaptcha();
+
     function submitOrder() {
       const uid = document.getElementById('uid').value.trim();
       const name = document.getElementById('playerName').value.trim();
       const diamondSelect = document.getElementById('diamondSelect');
+      const selectedDiamonds = Array.from(diamondSelect.selectedOptions)
+        .map((option, index) => `${index + 1}. ${option.text}`)
+        .join('\n');
       const paymentMethod = document.getElementById('paymentMethod').value;
       const paymentDetails = document.getElementById('paymentDetails').value;
       const orderTime = document.getElementById('orderTime').value;
       const totalPrice = calculateTotal();
+      const captchaInput = document.getElementById('captchaInput').value.trim();
 
       if (!uid) {
         alert('UID লিখুন');
@@ -333,16 +323,30 @@
         alert('সঠিক প্যাকেজ সিলেক্ট করুন');
         return;
       }
+      if (!captchaInput) {
+        alert('ক্যাপচা উত্তর দিন');
+        return;
+      }
+      if (parseInt(captchaInput, 10) !== captchaAnswer) {
+        alert('ক্যাপচা ভুল হয়েছে, দয়া করে আবার চেষ্টা করুন');
+        generateCaptcha();
+        return;
+      }
 
-      const selectedDiamonds = Array.from(diamondSelect.selectedOptions)
-        .map((option, index) => `${index + 1}. ${option.textContent} = ${option.getAttribute('data-price')} BDT`)
-        .join('\n');
+      // Confirm popup
+      const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n
+UID: ${uid}\n
+নাম: ${name}\n
+প্যাকেজ:\n${selectedDiamonds}\n
+মোট দাম: ${totalPrice} BDT\n
+পেমেন্ট মেথড: ${paymentMethod}\n
+অর্ডারের সময়: ${orderTime}`;
+      if (!confirm(confirmMsg)) {
+        return;
+      }
 
-      // লেভেল আপ প্যাকেজ আছে কি না চেক
-      let hasLevelUpPass = Array.from(diamondSelect.selectedOptions)
-        .some(option => option.textContent.toLowerCase().includes("level up"));
-
-      let message = `✅ অর্ডার এসেছে:
+      // Construct message with emojis
+      const message = `✅ অর্ডার এসেছে:
 🆔 UID: ${uid}
 👤 নাম: ${name}
 💎 প্যাকেজ:
@@ -353,20 +357,17 @@ ${selectedDiamonds}
 ${paymentDetails}
 ⏰ অর্ডারের সময়: ${orderTime}`;
 
-      if (hasLevelUpPass) {
-        message += `
-
-বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে`;
-      }
-
+      // Open WhatsApp chat with prefilled message
       const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
 
-      alert('অর্ডার সফলভাবে সাবমিট হয়েছে!');
+      // Show thank you message
+      document.getElementById('thankYouMessage').style.display = 'block';
+
       clearForm();
+      generateCaptcha();
     }
 
-    // ফর্ম ক্লিয়ার ফাংশন
     function clearForm() {
       document.getElementById('uid').value = '';
       document.getElementById('playerName').value = '';
@@ -377,7 +378,9 @@ ${paymentDetails}
       document.getElementById('paymentMethod').value = '';
       document.getElementById('paymentDetails').value = '';
       document.getElementById('totalPrice').textContent = 'মোট দাম: 0 BDT';
-      document.getElementById('levelUpNote').style.display = 'none';
+      document.getElementById('captchaInput').value = '';
+      // Hide thank you message on form clear
+      document.getElementById('thankYouMessage').style.display = 'none';
     }
   </script>
 </body>
