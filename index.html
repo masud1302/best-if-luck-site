@@ -341,13 +341,13 @@
 
       switch (paymentMethod) {
         case 'Bkash/Nagad':
-          detailsText = '\n01580495595';
+          detailsText = 'Bkash/Nagad\nনাম: PREMIUM CYBER GALAXY\nনম্বর: 01580495595';
           break;
         case 'Rocket':
-          detailsText = '\n01316019861';
+          detailsText = 'Rocket\nনাম: PREMIUM CYBER GALAXY\nনম্বর: 01316019861';
           break;
         case 'Upay':
-          detailsText = '\n01316019861';
+          detailsText = 'Upay\nনাম: PREMIUM CYBER GALAXY\nনম্বর: 01316019861';
           break;
         case 'Dhaka Bank':
           detailsText =
@@ -469,7 +469,7 @@ UID: ${uid}\n
 
       // WhatsApp URL
       const whatsappMessage = `অর্ডার এসেছে:\n\nUID:\n${uid}\n\nনাম:\n${name}\n\nপ্যাকেজ:\n${selectedDiamonds}\n\nমোট মূল্য: ${totalPrice} BDT\n\nপেমেন্ট মেথড:\n${paymentMethod}\n\nঅর্ডারের সময়:\n${orderTime}\n\nআপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
-      const whatsappNumber = '8801580495595'; // +880 omitted for URL
+      const whatsappNumber = '8801580495595'; 
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
       // ওপেন উইন্ডোতে WhatsApp URL
