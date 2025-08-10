@@ -253,10 +253,27 @@ M Masud
     <p>পেমেন্ট নাম্বার (Bkash, Nagad, Rocket):</p>
     <input type="text" id="paymentNumber" placeholder="017XXXXXXXX" maxlength="11" pattern="[0-9]{11}" title="১১ ডিজিট নাম্বার" required />
 
+    <div id="totalPrice">মোট দাম: 0 BDT</div>
+
+    <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
+    <select id="paymentMethod" required onchange="showPaymentDetails()">
+      <option value="" disabled selected>-- নির্বাচন করুন --</option>
+      <option value="Bkash/Nagad">Bkash/Nagad = 01580495595</option>
+      <option value="Rocket">Rocket = 01316019861</option>
+      <option value="Upay">Upay = 01316019861</option>
+      <option value="Dhaka Bank">Dhaka Bank</option>
+      <option value="UCB Bank">UCB Bank</option>
+      <option value="IFIC Bank">IFIC Bank</option>
+    </select>
+
     <div id="paymentDetailsContainer">
-      <textarea id="paymentDetails" readonly placeholder="অর্ডার ডিটেইলস এখানে দেখানো হবে।"></textarea>
-      <button id="copyBtn" title="ক্লিক করে কপি করুন">কপি</button>
-    </div>
+      <textarea
+        id="paymentDetails"
+        readonly
+        title="ক্লিক করে কপি করুন"
+        placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"
+      ></textarea>
+      <button id="copyBtn" onclick="copyPaymentDetails()" title="কপি করুন">📋</button>
 
     <input type="text" id="orderTime" readonly value="" />
 
