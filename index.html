@@ -39,20 +39,6 @@
       background-color: #f0f0f0;
       cursor: not-allowed;
     }
-    .image-upload {
-      margin-top: 10px;
-    }
-    .image-upload input {
-      font-size: 16px;
-    }
-    .image-preview {
-      margin-top: 10px;
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 10px;
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -60,7 +46,10 @@
     <h2>BEST OF LUCK DIAMOND TOP UP</h2>
 
     <p>আপনার ফ্রি ফায়ার UID লিখুন:</p>
-    <input type="text" id="uid" placeholder="UID (শুধু সংখ্যা)" required oninput="fetchName(this.value)" />
+    <input type="text" id="uid" placeholder="UID (শুধু সংখ্যা)" required />
+
+    <p>গেমে কি নাম দেয়া আছে?</p>
+    <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" required />
 
     <p>প্যাকেজ সিলেক্ট করুন:</p>
     <select id="diamondSelect">
@@ -86,13 +75,6 @@
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
 
-    <div class="image-upload">
-      <label for="profilePic">এখানে আপনার গেমের প্রোফাইল পিকচার দিন (অপশনাল):</label>
-      <input type="file" id="profilePic" accept="image/*" onchange="previewImage(event)" />
-      <br />
-      <img id="imagePreview" class="image-preview" />
-    </div>
-
     <button onclick="submitOrder()">সাবমিট করুন</button>
   </div>
 
@@ -107,29 +89,13 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // পিকচার প্রিভিউ ফাংশন
-    function previewImage(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      
-      reader.onload = function() {
-        const imagePreview = document.getElementById('imagePreview');
-        imagePreview.src = reader.result;
-        imagePreview.style.display = 'block';
-      }
-      
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    }
-
     // সাবমিট ফাংশন
     function submitOrder() {
       const uid = document.getElementById('uid').value;
+      const name = document.getElementById('playerName').value;
       const diamond = document.getElementById('diamondSelect').value;
       const payment = document.getElementById('paymentMethod').value;
       const orderTime = document.getElementById('orderTime').value;
-      const profilePic = document.getElementById('profilePic').files[0];
 
       if (!uid) {
         alert('UID লিখুন');
@@ -139,31 +105,14 @@
         alert('পেমেন্ট মেথড নির্বাচন করুন');
         return;
       }
-
-      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n💎 প্যাকেজ: ${diamond}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
-
-      // পিকচার যুক্ত করা হলে ফাইল প্রেরণ করার ফিচার (এটি আপনার সার্ভারে আপলোড করতে হবে)
-      if (profilePic) {
-        const formData = new FormData();
-        formData.append('file', profilePic);
-        formData.append('uid', uid);
-        formData.append('message', message);
-
-        fetch('/upload-profile-pic', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-          // আপলোড সফল হলে WhatsApp লিংক
-          const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
-          window.open(whatsappUrl, '_blank');
-        })
-        .catch(error => alert('ফাইল আপলোড করতে সমস্যা হয়েছে!'));
-      } else {
-        const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+      if (!name) {
+        alert('গেমে কি নাম দেয়া আছে? নাম লিখুন');
+        return;
       }
+
+      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ: ${diamond}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
+      const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
     }
   </script>
 </body>
