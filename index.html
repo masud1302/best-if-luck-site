@@ -109,29 +109,6 @@
     #copyBtn:hover {
       background-color: #0056b3;
     }
-    #captchaSection {
-      margin-top: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    #captchaQuestion {
-      font-weight: bold;
-      font-size: 18px;
-      margin-left: 5px;
-    }
-    #captchaInput {
-      width: 100%;
-      max-width: 220px;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
     #orderTime {
       width: 100%;
       padding: 12px;
@@ -188,9 +165,6 @@
         width: auto;
         height: 30px;
         padding: 6px 12px;
-      }
-      #captchaSection {
-        flex-direction: column;
       }
     }
   </style>
@@ -278,12 +252,6 @@
     <p>অর্ডার সময়:</p>
     <input type="text" id="orderTime" readonly />
 
-    <div id="captchaSection">
-      <span>নিচের যোগফল দিন:</span>
-      <span id="captchaQuestion"></span>
-      <input type="text" id="captchaInput" placeholder="উত্তর লিখুন" autocomplete="off" />
-    </div>
-
     <button onclick="submitOrder()">অর্ডার করুন</button>
 
     <div id="thankYouMessage"></div>
@@ -317,16 +285,6 @@
       return total;
     }
 
-    // Generate random simple math captcha question and store answer
-    let captchaAnswer = 0;
-    function generateCaptcha() {
-      const a = Math.floor(Math.random() * 10) + 1;
-      const b = Math.floor(Math.random() * 10) + 1;
-      captchaAnswer = a + b;
-      document.getElementById('captchaQuestion').textContent = `${a} + ${b} = ?`;
-      document.getElementById('captchaInput').value = '';
-    }
-
     // Show current date-time in orderTime input
     function updateOrderTime() {
       const now = new Date();
@@ -346,11 +304,10 @@
       });
     }
 
-    // Submit order function with validation and captcha check
+    // Submit order function with validation (ক্যাপচা চেক বাদ দেওয়া হয়েছে)
     function submitOrder() {
       const uid = document.getElementById('uid').value.trim();
       const playerName = document.getElementById('playerName').value.trim();
-      const captchaInput = document.getElementById('captchaInput').value.trim();
 
       if (!uid.match(/^\d{9,11}$/)) {
         alert('সঠিক UID লিখুন (৯-১১ সংখ্যার)');
@@ -358,11 +315,6 @@
       }
       if (!playerName) {
         alert('গেম নাম লিখুন');
-        return;
-      }
-      if (captchaInput !== captchaAnswer.toString()) {
-        alert('ক্যাপচা ভুল হয়েছে। আবার চেষ্টা করুন।');
-        generateCaptcha();
         return;
       }
 
@@ -389,43 +341,34 @@
 UID: ${uid}
 গেম নাম: ${playerName}
 সিলেক্ট করা প্যাকেজসমূহ:
-${selectedPackages.map((pkg, i) => `  ${i + 1}. ${pkg}`).join('\n')}
+${selectedPackages.map(p => '👉 ' + p).join('\n')}
+
 মোট দাম: ${totalPrice} BDT
 অর্ডার সময়: ${orderTime}
 
-ধন্যবাদ আপনার অর্ডারের জন্য! দ্রুত যোগাযোগ করা হবে।
+দয়া করে উপরের তথ্য নিয়ে দ্রুত পেমেন্ট সম্পন্ন করুন।
       `.trim();
 
-      // Show loading spinner and simulate submission delay
+      // Show loading spinner for 1.5 seconds to simulate processing
       const spinner = document.getElementById('loadingSpinner');
       spinner.style.display = 'block';
 
       setTimeout(() => {
         spinner.style.display = 'none';
+        // Show thank you message
+        document.getElementById('thankYouMessage').textContent = 'ধন্যবাদ! আপনার অর্ডার সফল হয়েছে।';
+        // Show payment details in textarea
         document.getElementById('paymentDetails').value = paymentDetails;
-        document.getElementById('thankYouMessage').textContent = 'ধন্যবাদ! অর্ডার সম্পন্ন হয়েছে।';
-        // Optionally, reset fields:
-        // document.getElementById('uid').value = '';
-        // document.getElementById('playerName').value = '';
-        // reset all selects
-        ['diamondSelect', 'weeklyMonthlySelect', 'levelUpSelect', 'evoAccessSelect'].forEach(id => {
-          const selectElem = document.getElementById(id);
-          Array.from(selectElem.options).forEach(opt => opt.selected = false);
-        });
-        calculateTotal();
-        generateCaptcha();
+
+        // Scroll to payment details
+        document.getElementById('paymentDetailsContainer').scrollIntoView({behavior: 'smooth'});
+
       }, 1500);
     }
 
-    // Initialize
-    window.onload = () => {
-      generateCaptcha();
-      updateOrderTime();
-      calculateTotal();
-
-      // Update order time every 30 seconds
-      setInterval(updateOrderTime, 30000);
-    };
+    // Update order time every 30 seconds
+    updateOrderTime();
+    setInterval(updateOrderTime, 30000);
   </script>
 </body>
 </html>
