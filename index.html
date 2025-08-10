@@ -39,15 +39,29 @@
       background-color: #f0f0f0;
       cursor: not-allowed;
     }
+    .image-upload {
+      margin-top: 10px;
+    }
+    .image-upload input {
+      font-size: 16px;
+    }
+    .image-preview {
+      margin-top: 10px;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>BEST OF LUCK DIAMOND TOP UP</h2>
+
     <p>আপনার ফ্রি ফায়ার UID লিখুন:</p>
     <input type="text" id="uid" placeholder="UID (শুধু সংখ্যা)" required oninput="fetchName(this.value)" />
-    <p>প্লেয়ারের নাম:</p>
-    <input type="text" id="playerName" placeholder="নাম অটোমেটিক আসবে" readonly />
+
     <p>প্যাকেজ সিলেক্ট করুন:</p>
     <select id="diamondSelect">
       <option value="25 Diamond = 25 BDT">25 Diamond = 25 BDT</option>
@@ -61,37 +75,28 @@
       <option value="850 Diamond = 546 BDT">850 Diamond = 546 BDT</option>
       <option value="1090 Diamond = 700 BDT">1090 Diamond = 700 BDT</option>
     </select>
+
     <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
     <select id="paymentMethod" required>
       <option value="" disabled selected>-- নির্বাচন করুন --</option>
       <option value="Bkash/Nagad = 01580495595">Bkash/Nagad = 01580495595</option>
       <option value="Cash on Delivery">Cash on Delivery</option>
     </select>
+
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
+
+    <div class="image-upload">
+      <label for="profilePic">এখানে আপনার গেমের প্রোফাইল পিকচার দিন (অপশনাল):</label>
+      <input type="file" id="profilePic" accept="image/*" onchange="previewImage(event)" />
+      <br />
+      <img id="imagePreview" class="image-preview" />
+    </div>
+
     <button onclick="submitOrder()">সাবমিট করুন</button>
   </div>
 
   <script>
-    // নাম আনার ফাংশন
-    async function fetchName(uid) {
-      if (uid.length < 6) {
-        document.getElementById('playerName').value = "";
-        return;
-      }
-      try {
-        // JSON ফাইল থেকে নাম সংগ্রহ
-        const res = await fetch('/data/players.json');
-        const players = await res.json();
-        
-        // UID অনুযায়ী নাম দেখানো
-        const name = players[uid] || "নাম পাওয়া যায়নি";
-        document.getElementById('playerName').value = name;
-      } catch (e) {
-        document.getElementById('playerName').value = "ত্রুটি হয়েছে";
-      }
-    }
-
     // অর্ডারের সময় আপডেট (লোড হলে এবং প্রতি সেকেন্ডে)
     function updateTime() {
       const now = new Date();
@@ -102,13 +107,29 @@
     setInterval(updateTime, 1000);
     updateTime();
 
+    // পিকচার প্রিভিউ ফাংশন
+    function previewImage(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function() {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.src = reader.result;
+        imagePreview.style.display = 'block';
+      }
+      
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+
     // সাবমিট ফাংশন
     function submitOrder() {
       const uid = document.getElementById('uid').value;
-      const name = document.getElementById('playerName').value;
       const diamond = document.getElementById('diamondSelect').value;
       const payment = document.getElementById('paymentMethod').value;
       const orderTime = document.getElementById('orderTime').value;
+      const profilePic = document.getElementById('profilePic').files[0];
 
       if (!uid) {
         alert('UID লিখুন');
@@ -119,9 +140,30 @@
         return;
       }
 
-      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ: ${diamond}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
-      const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
+      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n💎 প্যাকেজ: ${diamond}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
+
+      // পিকচার যুক্ত করা হলে ফাইল প্রেরণ করার ফিচার (এটি আপনার সার্ভারে আপলোড করতে হবে)
+      if (profilePic) {
+        const formData = new FormData();
+        formData.append('file', profilePic);
+        formData.append('uid', uid);
+        formData.append('message', message);
+
+        fetch('/upload-profile-pic', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+          // আপলোড সফল হলে WhatsApp লিংক
+          const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
+          window.open(whatsappUrl, '_blank');
+        })
+        .catch(error => alert('ফাইল আপলোড করতে সমস্যা হয়েছে!'));
+      } else {
+        const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+      }
     }
   </script>
 </body>
