@@ -469,7 +469,7 @@ UID: ${uid}\n
       }
 
       // WhatsApp URL
-      const whatsappMessage = `অর্ডার এসেছে:\n\nUID:\n${uid}\n\nনাম:\n${name}\n\nপেমেন্ট মেথড:\n${paymentMethod} ${paymentDetails}\n\nমোট মূল্য: ${totalPrice} BDT\n\nপেমেন্ট মেথড:\n${paymentMethod}\n\nঅর্ডারের সময়:\n${orderTime}\n\nআপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
+      const whatsappMessage = `New Order:\n\nUID:\n${uid}\n\nনাম:\n${name}\n\nপেমেন্ট মেথড:\n${paymentDetails}\n\nমোট মূল্য: ${totalPrice} BDT\n\nপেমেন্ট মেথড:\n${paymentDetails}\n\nঅর্ডারের সময়:\n${orderTime}\n\nআপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
       const whatsappNumber = '8801580495595'; 
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
