@@ -1,4 +1,5 @@
-M Masud
+1. ok
+
 
 <!DOCTYPE html>
 <html lang="bn">
@@ -111,6 +112,29 @@ M Masud
     #copyBtn:hover {
       background-color: #0056b3;
     }
+    #captchaSection {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    #captchaQuestion {
+      font-weight: bold;
+      font-size: 18px;
+      margin-left: 5px;
+    }
+    #captchaInput {
+      width: 100%;
+      max-width: 220px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
     #orderTime {
       width: 100%;
       padding: 12px;
@@ -167,6 +191,9 @@ M Masud
         width: auto;
         height: 30px;
         padding: 6px 12px;
+      }
+      #captchaSection {
+        flex-direction: column;
       }
     }
   </style>
@@ -248,7 +275,11 @@ M Masud
       <option data-price="308">👑 30 Days Evo Access = 308 BDT</option>
     </select>
 
-    <p style="font-size:18px; font-weight:bold;" id="totalPrice">মোট মূল্য: 0 BDT</p>
+    <p style="font-size: 13px; color: red; margin-top: 5px;">
+      বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে
+    </p>
+
+    <div id="totalPrice">মোট দাম: 0 BDT</div>
 
     <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
     <select id="paymentMethod" required onchange="showPaymentDetails()">
@@ -269,50 +300,28 @@ M Masud
         placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"
       ></textarea>
       <button id="copyBtn" onclick="copyPaymentDetails()" title="কপি করুন">📋</button>
+    </div>
 
-    <input type="text" id="orderTime" readonly value="" />
+    <div id="captchaSection">
+      <p>ক্যাপচা (সহজ যোগ): <span id="captchaQuestion"></span></p>
+      <input type="text" id="captchaInput" placeholder="উত্তর লিখুন" autocomplete="off" />
+    </div>
 
-    <button id="submitBtn">অর্ডার করুন</button>
+    <p>অর্ডারের সময় ও তারিখ:</p>
+    <input type="text" id="orderTime" readonly />
 
-    <p id="thankYouMessage"></p>
+    <button id="submitBtn" onclick="submitOrder()">সাবমিট করুন</button>
 
     <div id="loadingSpinner"></div>
+
+    <p id="thankYouMessage"></p>
   </div>
 
   <script>
-    // Calculate total price from all select boxes with multiple selections
-    function calculateTotal() {
-      const diamondSelect = document.getElementById('diamondSelect');
-      const weeklyMonthlySelect = document.getElementById('weeklyMonthlySelect');
-      const levelUpSelect = document.getElementById('levelUpSelect');
-      const evoAccessSelect = document.getElementById('evoAccessSelect');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankYouMessage = document.getElementById('thankYouMessage');
 
-      let total = 0;
-
-      [diamondSelect, weeklyMonthlySelect, levelUpSelect, evoAccessSelect].forEach(selectBox => {
-        Array.from(selectBox.selectedOptions).forEach(option => {
-          total += parseInt(option.dataset.price, 10);
-        });
-      });
-
-      document.getElementById('totalPrice').textContent = 'মোট মূল্য: ' + total + ' BDT';
-    }
-
-    // Copy payment details to clipboard
-    document.getElementById('copyBtn').addEventListener('click', () => {
-      const paymentDetails = document.getElementById('paymentDetails');
-      if(paymentDetails.value.trim().length === 0) {
-        alert('প্রথমে অর্ডার ডিটেইলস তৈরি করুন');
-        return;
-      }
-      paymentDetails.select();
-      paymentDetails.setSelectionRange(0, 99999); // For mobile devices
-      navigator.clipboard.writeText(paymentDetails.value)
-        .then(() => alert('কপি সম্পন্ন!'))
-        .catch(() => alert('কপি করতে ব্যর্থ হয়েছে।'));
-    });
-
-    // Format current time to readable string
     function updateTime() {
       const now = new Date();
       const options = {
@@ -395,6 +404,16 @@ M Masud
       );
     }
 
+    function generateCaptcha() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      captchaAnswer = a + b;
+      document.getElementById('captchaQuestion').textContent = `${a} + ${b} = ?`;
+      document.getElementById('captchaInput').value = '';
+    }
+    generateCaptcha();
+    setInterval(generateCaptcha, 30000);
+
     function submitOrder() {
       thankYouMessage.textContent = '';
       const uid = document.getElementById('uid').value.trim();
@@ -407,29 +426,17 @@ M Masud
       const paymentDetails = document.getElementById('paymentDetails').value;
       const orderTime = document.getElementById('orderTime').value;
       const totalPrice = calculateTotal();
-
-    // Show loading spinner
-    function showLoading(show) {
-      const spinner = document.getElementById('loadingSpinner');
-      spinner.style.display = show ? 'block' : 'none';
-    }
-
-    document.getElementById('submitBtn').addEventListener('click', () => {
-      const uid = document.getElementById('uid').value.trim();
-      const playerName = document.getElementById('playerName').value.trim();
-      const paymentNumber = document.getElementById('paymentNumber').value.trim();
-      const diamondSelect = document.getElementById('diamondSelect');
-      const weeklyMonthlySelect = document.getElementById('weeklyMonthlySelect');
-      const levelUpSelect = document.getElementById('levelUpSelect');
-      const evoAccessSelect = document.getElementById('evoAccessSelect');
-
-      // Validations
-      if (!uid || uid.length < 9 || uid.length > 11) {
-        alert('সঠিক UID প্রদান করুন (৯ থেকে ১১ সংখ্যার মধ্যে)।');
+      
+      if (!uid) {
+        alert('UID লিখুন');
         return;
       }
-      if (!playerName) {
-        alert('অনুগ্রহ করে আপনার গেম নাম লিখুন।');
+      if (!/^\d{9,11}$/.test(uid)) {
+        alert('UID অবশ্যই ৯ থেকে ১১ সংখ্যার মধ্যে হতে হবে');
+        return;
+      }
+      if (!name) {
+        alert('গেমে কি নাম দেয়া আছে? নাম লিখুন');
         return;
       }
       if (diamondSelect.selectedOptions.length === 0) {
@@ -447,21 +454,22 @@ M Masud
       if (totalPrice <= 0) {
         alert('সঠিক প্যাকেজ সিলেক্ট করুন');
         return;
-        // লোডিং স্পিনার চালু
+      }
+      if (!captchaInput) {
+        alert('ক্যাপচা উত্তর দিন');
+        return;
+      }
+      if (parseInt(captchaInput, 10) !== captchaAnswer) {
+        alert('ক্যাপচা ভুল হয়েছে, দয়া করে আবার চেষ্টা করুন');
+        generateCaptcha();
+        return;
+      }
+
+      // লোডিং স্পিনার চালু
       loadingSpinner.style.display = 'block';
       submitBtn.disabled = true;
 
-      // At least one package must be selected
-      if (
-        diamondSelect.selectedOptions.length === 0 &&
-        weeklyMonthlySelect.selectedOptions.length === 0 &&
-        levelUpSelect.selectedOptions.length === 0 &&
-        evoAccessSelect.selectedOptions.length === 0
-      ) {
-        alert('অনুগ্রহ করে একটি প্যাকেজ সিলেক্ট করুন।');
-        return;
-      }
-         const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n
+      const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n
 UID: ${uid}\n
 নাম: ${name}\n
 প্যাকেজ:\n${selectedDiamonds}\n
@@ -474,7 +482,8 @@ UID: ${uid}\n
         submitBtn.disabled = false;
         return;
       }
-        const message = `✅ New Order:
+
+      const message = `✅ New Order:
 🆔 UID: ${uid}
 👤 নাম: ${name}
 💎 প্যাকেজ:
@@ -499,47 +508,10 @@ window.open(whatsappUrl, '_blank');
       generateCaptcha();
       document.getElementById('captchaInput').value = '';
 
-      showLoading(true);
-
-      setTimeout(() => {
-        // Prepare order details string
-        let details = `UID: ${uid}\n`;
-        details += `Name: ${playerName}\n\n`;
-        details += `Selected Packages:\n`;
-
-        function listSelectedOptions(selectBox) {
-          return Array.from(selectBox.selectedOptions).map(opt => opt.text).join('\n');
-        }
-
-        if(diamondSelect.selectedOptions.length) {
-          details += `\nDiamond Packages:\n${listSelectedOptions(diamondSelect)}\n`;
-        }
-        if(weeklyMonthlySelect.selectedOptions.length) {
-          details += `\nWeekly & Monthly Packages:\n${listSelectedOptions(weeklyMonthlySelect)}\n`;
-        }
-        if(levelUpSelect.selectedOptions.length) {
-          details += `\nLevel Up Packages:\n${listSelectedOptions(levelUpSelect)}\n`;
-        }
-        if(evoAccessSelect.selectedOptions.length) {
-          details += `\nEvo Access Packages:\n${listSelectedOptions(evoAccessSelect)}\n`;
-        }
-
-        details += `\nTotal Price: ${document.getElementById('totalPrice').textContent.replace('মোট মূল্য: ', '')}`;
-        details += `\nPayment Number: ${paymentNumber}\n`;
-
-        document.getElementById('paymentDetails').value = details;
-
-        // Set order time
-        document.getElementById('orderTime').value = 'অর্ডার সময়: ' + formatTime(new Date());
-
-        document.getElementById('thankYouMessage').textContent = 'ধন্যবাদ! আপনার অর্ডার গ্রহণ করা হয়েছে।';
-
-        showLoading(false);
-      }, 1000);
-    });
-
-    // Initialize total on page load
-    calculateTotal();
+      // লোডিং স্পিনার বন্ধ
+      loadingSpinner.style.display = 'none';
+      submitBtn.disabled = false;
+    }
   </script>
 </body>
 </html>
