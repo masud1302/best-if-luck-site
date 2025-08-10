@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BEST OF LUCK DIAMOND TOP UP</title>
   <style>
-    /* পূর্বের স্টাইল একই থাকবে */
     body {
       background-color: skyblue;
       font-family: 'Arial', sans-serif;
@@ -106,10 +105,6 @@
       user-select: none;
       transition: background-color 0.3s ease;
       flex-shrink: 0;
-      width: 44px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     #copyBtn:hover {
       background-color: #0056b3;
@@ -197,11 +192,6 @@
         flex-direction: column;
       }
     }
-    p.note {
-      font-size: 13px; 
-      color: red; 
-      margin-top: 5px;
-    }
   </style>
 </head>
 <body>
@@ -224,8 +214,8 @@
     <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" autocomplete="off" required />
 
     <p>প্যাকেজ সিলেক্ট করুন:</p>
-    <select id="diamondSelect" multiple size="10" required onchange="calculateTotal()">
-      <!-- ডায়মন্ড প্যাকেজ -->
+    <select id="diamondSelect" multiple size="15" required onchange="calculateTotal()">
+      <!-- Diamond Packages -->
       <option data-price="25">25 Diamond = 25 BDT</option>
       <option data-price="40">50 Diamond = 40 BDT</option>
       <option data-price="82">115 Diamond = 82 BDT</option>
@@ -241,7 +231,7 @@
       <option data-price="3124">5060 Diamond = 3124 BDT</option>
       <option data-price="6240">10120 Diamond = 6240 BDT</option>
 
-      <!-- Level Up প্যাকেজ -->
+      <!-- Level Up Packages -->
       <option data-price="39">☞ Level Up-6   ➪ 39 BDT</option>
       <option data-price="67">☞ Level Up-10 ➪ 67 BDT</option>
       <option data-price="67">☞ Level Up-15 ➪ 67 BDT</option>
@@ -250,23 +240,24 @@
       <option data-price="95">☞ Level Up-30 ➪ 95 BDT</option>
       <option data-price="390">☞ Level Up pass full 1270 DM ➪ 390 BDT</option>
 
-      <!-- Monthly and Weekly Packages -->
-      <option data-price="768">Monthly = 768 BDT</option>
-      <option data-price="1530">Monthly 2x = 1530 BDT</option>
-      <option data-price="165">Weekly = 165 BDT</option>
-      <option data-price="325">Weekly 2x = 325 BDT</option>
-      <option data-price="485">Weekly 3x = 485 BDT</option>
-      <option data-price="630">Weekly 4x = 630 BDT</option>
-      <option data-price="785">Weekly 5x = 785 BDT</option>
-      <option data-price="43">Weekly Lite = 43 BDT</option>
-      <option data-price="85">2X Weekly Lite = 85 BDT</option>
-      <option data-price="127">3X Weekly Lite = 127 BDT</option>
-      <option data-price="210">5X Weekly Lite = 210 BDT</option>
-      <option data-price="70">3 Days Evo Access = 70 BDT</option>
-      <option data-price="107">7 Days Evo Access = 107 BDT</option>
-      <option data-price="308">30 Days Evo Access = 308 BDT</option>
+      <!-- Monthly & Weekly Packages -->
+      <option data-price="768">🗓️ Monthly = 768 BDT</option>
+      <option data-price="1530">🗓️ Monthly 2x = 1530 BDT</option>
+      <option data-price="165">📅 Weekly = 165 BDT</option>
+      <option data-price="325">📅 Weekly 2x = 325 BDT</option>
+      <option data-price="485">📅 Weekly 3x = 485 BDT</option>
+      <option data-price="630">📅 Weekly 4x = 630 BDT</option>
+      <option data-price="785">📅 Weekly 5x = 785 BDT</option>
+      <option data-price="43">📅 Weekly Lite = 43 BDT</option>
+      <option data-price="85">📅 2X Weekly Lite = 85 BDT</option>
+      <option data-price="127">📅 3X Weekly Lite = 127 BDT</option>
+      <option data-price="210">📅 5X Weekly Lite = 210 BDT</option>
+      <option data-price="70">🎟️ 3 Days Evo Access = 70 BDT</option>
+      <option data-price="107">🎟️ 7 Days Evo Access = 107 BDT</option>
+      <option data-price="308">🎟️ 30 Days Evo Access = 308 BDT</option>
     </select>
-    <p class="note">
+
+    <p style="font-size: 13px; color: red; margin-top: 5px;">
       বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে
     </p>
 
@@ -453,51 +444,53 @@
         return;
       }
       if (parseInt(captchaInput, 10) !== captchaAnswer) {
-        alert('ক্যাপচা ভুল হয়েছে। আবার চেষ্টা করুন।');
+        alert('ক্যাপচা ভুল হয়েছে, দয়া করে আবার চেষ্টা করুন');
         generateCaptcha();
         return;
       }
 
-      // Show loading spinner & disable submit button
+      // লোডিং স্পিনার চালু
       loadingSpinner.style.display = 'block';
       submitBtn.disabled = true;
-      submitBtn.textContent = 'অর্ডার প্রক্রিয়াধীন...';
 
-      setTimeout(() => {
+      const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n
+UID: ${uid}\n
+নাম: ${name}\n
+প্যাকেজ:\n${selectedDiamonds}\n
+মোট দাম: ${totalPrice} BDT\n
+পেমেন্ট মেথড: ${paymentMethod}\n
+অর্ডারের সময়: ${orderTime}`;
+
+      if (!confirm(confirmMsg)) {
         loadingSpinner.style.display = 'none';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'সাবমিট করুন';
+        return;
+      }
 
-        // Generate order summary text (with newlines)
-        const orderSummary =
-          `অর্ডার এসেছে:\n\n` +
-          `UID:\n${uid}\n\n` +
-          `নাম:\n${name}\n\n` +
-          `প্যাকেজ:\n${selectedDiamonds}\n\n` +
-          `মোট মূল্য: ${totalPrice} BDT\n\n` +
-          `পেমেন্ট মেথড:\n${paymentMethod}\n\n` +
-          `অর্ডারের সময়:\n${orderTime}\n\n` +
-          `আপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
+      // WhatsApp URL
+      const whatsappMessage = `অর্ডার এসেছে:\n\nUID:\n${uid}\n\nনাম:\n${name}\n\nপ্যাকেজ:\n${selectedDiamonds}\n\nমোট মূল্য: ${totalPrice} BDT\n\nপেমেন্ট মেথড:\n${paymentMethod}\n\nঅর্ডারের সময়:\n${orderTime}\n\nআপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
+      const whatsappNumber = '8801580495595'; // +880 omitted for URL
+      const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
-        thankYouMessage.textContent = 'আপনার অর্ডার সফল হয়েছে, ধন্যবাদ!';
+      // ওপেন উইন্ডোতে WhatsApp URL
+      window.open(whatsappURL, '_blank');
 
-        // Show summary in payment details textarea for easy copy
-        document.getElementById('paymentDetails').value = orderSummary;
+      // সফল বার্তা দেখান
+      thankYouMessage.textContent = 'অর্ডার সফল হয়েছে, ধন্যবাদ!';
 
-        // ** WhatsApp Message Sending **
+      // ফর্ম রিসেট করুন
+      document.getElementById('uid').value = '';
+      document.getElementById('playerName').value = '';
+      diamondSelect.selectedIndex = -1;
+      calculateTotal();
+      document.getElementById('paymentMethod').selectedIndex = 0;
+      document.getElementById('paymentDetails').value = '';
+      generateCaptcha();
+      document.getElementById('captchaInput').value = '';
 
-        // WhatsApp phone number (বাংলাদেশের ফোন নম্বর +880 1XXXXXXXXX ফরম্যাটে)
-        const whatsappNumber = '8801580495595'; // এখানে আপনার WhatsApp নম্বর দিন
-
-        // Encode message for URL
-        const encodedMessage = encodeURIComponent(orderSummary);
-
-        // WhatsApp URL
-        const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-        // Open WhatsApp chat in new tab/window
-        window.open(whatsappURL, '_blank');
-      }, 2500);
+      // লোডিং স্পিনার বন্ধ
+      loadingSpinner.style.display = 'none';
+      submitBtn.disabled = false;
     }
   </script>
 </body>
