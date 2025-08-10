@@ -1,6 +1,3 @@
-1. ok
-
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -112,29 +109,6 @@
     #copyBtn:hover {
       background-color: #0056b3;
     }
-    #captchaSection {
-      margin-top: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    #captchaQuestion {
-      font-weight: bold;
-      font-size: 18px;
-      margin-left: 5px;
-    }
-    #captchaInput {
-      width: 100%;
-      max-width: 220px;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
     #orderTime {
       width: 100%;
       padding: 12px;
@@ -191,9 +165,6 @@
         width: auto;
         height: 30px;
         padding: 6px 12px;
-      }
-      #captchaSection {
-        flex-direction: column;
       }
     }
   </style>
@@ -275,245 +246,151 @@
       <option data-price="308">👑 30 Days Evo Access = 308 BDT</option>
     </select>
 
-    <p style="font-size: 13px; color: red; margin-top: 5px;">
-      বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে
-    </p>
+    <p style="font-size:18px; font-weight:bold;" id="totalPrice">মোট মূল্য: 0 BDT</p>
 
-    <div id="totalPrice">মোট দাম: 0 BDT</div>
-
-    <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
-    <select id="paymentMethod" required onchange="showPaymentDetails()">
-      <option value="" disabled selected>-- নির্বাচন করুন --</option>
-      <option value="Bkash/Nagad">Bkash/Nagad = 01580495595</option>
-      <option value="Rocket">Rocket = 01316019861</option>
-      <option value="Upay">Upay = 01316019861</option>
-      <option value="Dhaka Bank">Dhaka Bank</option>
-      <option value="UCB Bank">UCB Bank</option>
-      <option value="IFIC Bank">IFIC Bank</option>
-    </select>
+    <p>পেমেন্ট নাম্বার (Bkash, Nagad, Rocket):</p>
+    <input type="text" id="paymentNumber" placeholder="017XXXXXXXX" maxlength="11" pattern="[0-9]{11}" title="১১ ডিজিট নাম্বার" required />
 
     <div id="paymentDetailsContainer">
-      <textarea
-        id="paymentDetails"
-        readonly
-        title="ক্লিক করে কপি করুন"
-        placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"
-      ></textarea>
-      <button id="copyBtn" onclick="copyPaymentDetails()" title="কপি করুন">📋</button>
+      <textarea id="paymentDetails" readonly placeholder="অর্ডার ডিটেইলস এখানে দেখানো হবে।"></textarea>
+      <button id="copyBtn" title="ক্লিক করে কপি করুন">কপি</button>
     </div>
 
-    <div id="captchaSection">
-      <p>ক্যাপচা (সহজ যোগ): <span id="captchaQuestion"></span></p>
-      <input type="text" id="captchaInput" placeholder="উত্তর লিখুন" autocomplete="off" />
-    </div>
+    <input type="text" id="orderTime" readonly value="" />
 
-    <p>অর্ডারের সময় ও তারিখ:</p>
-    <input type="text" id="orderTime" readonly />
-
-    <button id="submitBtn" onclick="submitOrder()">সাবমিট করুন</button>
-
-    <div id="loadingSpinner"></div>
+    <button id="submitBtn">অর্ডার করুন</button>
 
     <p id="thankYouMessage"></p>
+
+    <div id="loadingSpinner"></div>
   </div>
 
   <script>
-    let captchaAnswer = 0;
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const submitBtn = document.getElementById('submitBtn');
-    const thankYouMessage = document.getElementById('thankYouMessage');
+    // Calculate total price from all select boxes with multiple selections
+    function calculateTotal() {
+      const diamondSelect = document.getElementById('diamondSelect');
+      const weeklyMonthlySelect = document.getElementById('weeklyMonthlySelect');
+      const levelUpSelect = document.getElementById('levelUpSelect');
+      const evoAccessSelect = document.getElementById('evoAccessSelect');
 
-    function updateTime() {
-      const now = new Date();
-      const options = {
-        timeZone: 'Asia/Dhaka',
+      let total = 0;
+
+      [diamondSelect, weeklyMonthlySelect, levelUpSelect, evoAccessSelect].forEach(selectBox => {
+        Array.from(selectBox.selectedOptions).forEach(option => {
+          total += parseInt(option.dataset.price, 10);
+        });
+      });
+
+      document.getElementById('totalPrice').textContent = 'মোট মূল্য: ' + total + ' BDT';
+    }
+
+    // Copy payment details to clipboard
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      const paymentDetails = document.getElementById('paymentDetails');
+      if(paymentDetails.value.trim().length === 0) {
+        alert('প্রথমে অর্ডার ডিটেইলস তৈরি করুন');
+        return;
+      }
+      paymentDetails.select();
+      paymentDetails.setSelectionRange(0, 99999); // For mobile devices
+      navigator.clipboard.writeText(paymentDetails.value)
+        .then(() => alert('কপি সম্পন্ন!'))
+        .catch(() => alert('কপি করতে ব্যর্থ হয়েছে।'));
+    });
+
+    // Format current time to readable string
+    function formatTime(date) {
+      return date.toLocaleString('bn-BD', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      };
-      const formatted = now.toLocaleString('bn-BD', options);
-      document.getElementById('orderTime').value = formatted;
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    function calculateTotal() {
-      const diamondSelect = document.getElementById('diamondSelect');
-      let total = 0;
-      for (const option of diamondSelect.selectedOptions) {
-        total += parseInt(option.getAttribute('data-price'), 10) || 0;
-      }
-      document.getElementById('totalPrice').textContent = `মোট দাম: ${total} BDT`;
-      return total;
+        second: '2-digit'
+      });
     }
 
-    function showPaymentDetails() {
-      const paymentMethod = document.getElementById('paymentMethod').value;
-      const paymentDetails = document.getElementById('paymentDetails');
-
-      let detailsText = '';
-
-      switch (paymentMethod) {
-        case 'Bkash/Nagad':
-          detailsText = 'Bkash/Nagad\nনাম: PREMIUM CYBER GALAXY\nনম্বর: 01580495595';
-          break;
-        case 'Rocket':
-          detailsText = 'Rocket\nনাম: PREMIUM CYBER GALAXY\nনম্বর: 01316019861';
-          break;
-        case 'Upay':
-          detailsText = 'Upay\nনাম: PREMIUM CYBER GALAXY\nনম্বর: 01316019861';
-          break;
-        case 'Dhaka Bank':
-          detailsText =
-            'Dhaka Bank\n' +
-            'নাম: MD MAHFUZUL ISLAM\n' +
-            'একাউন্ট নাম্বার: 4111100035349\n' +
-            'ব্রাঞ্চ: Bogura';
-          break;
-        case 'UCB Bank':
-          detailsText =
-            'UCB Bank\n' +
-            'নাম: PREMIUM CYBER GALAXY\n' +
-            'একাউন্ট নাম্বার: 0072101000007006\n' +
-            'ব্রাঞ্চ: -';
-          break;
-        case 'IFIC Bank':
-          detailsText =
-            'IFIC Bank\n' +
-            'নাম: MD MAHFUZUL ISLAM\n' +
-            'একাউন্ট নাম্বার: 0230107830851\n' +
-            'ব্রাঞ্চ: Bogura';
-          break;
-        default:
-          detailsText = '';
-      }
-
-      paymentDetails.value = detailsText;
+    // Show loading spinner
+    function showLoading(show) {
+      const spinner = document.getElementById('loadingSpinner');
+      spinner.style.display = show ? 'block' : 'none';
     }
 
-    function copyPaymentDetails() {
-      const paymentDetails = document.getElementById('paymentDetails');
-      paymentDetails.select();
-      paymentDetails.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(paymentDetails.value).then(
-        () => alert('পেমেন্ট ডিটেইল কপি করা হয়েছে!'),
-        () => alert('কপি করতে সমস্যা হয়েছে। অনুগ্রহ করে ম্যানুয়ালি কপি করুন।')
-      );
-    }
-
-    function generateCaptcha() {
-      const a = Math.floor(Math.random() * 10) + 1;
-      const b = Math.floor(Math.random() * 10) + 1;
-      captchaAnswer = a + b;
-      document.getElementById('captchaQuestion').textContent = `${a} + ${b} = ?`;
-      document.getElementById('captchaInput').value = '';
-    }
-    generateCaptcha();
-    setInterval(generateCaptcha, 30000);
-
-    function submitOrder() {
-      thankYouMessage.textContent = '';
+    document.getElementById('submitBtn').addEventListener('click', () => {
       const uid = document.getElementById('uid').value.trim();
-      const name = document.getElementById('playerName').value.trim();
+      const playerName = document.getElementById('playerName').value.trim();
+      const paymentNumber = document.getElementById('paymentNumber').value.trim();
       const diamondSelect = document.getElementById('diamondSelect');
-      const selectedDiamonds = Array.from(diamondSelect.selectedOptions)
-        .map((option, index) => `${index + 1}. ${option.text}`)
-        .join('\n');
-      const paymentMethod = document.getElementById('paymentMethod').value;
-      const paymentDetails = document.getElementById('paymentDetails').value;
-      const orderTime = document.getElementById('orderTime').value;
-      const totalPrice = calculateTotal();
-      const captchaInput = document.getElementById('captchaInput').value.trim();
+      const weeklyMonthlySelect = document.getElementById('weeklyMonthlySelect');
+      const levelUpSelect = document.getElementById('levelUpSelect');
+      const evoAccessSelect = document.getElementById('evoAccessSelect');
 
-      if (!uid) {
-        alert('UID লিখুন');
+      // Validations
+      if (!uid || uid.length < 9 || uid.length > 11) {
+        alert('সঠিক UID প্রদান করুন (৯ থেকে ১১ সংখ্যার মধ্যে)।');
         return;
       }
-      if (!/^\d{9,11}$/.test(uid)) {
-        alert('UID অবশ্যই ৯ থেকে ১১ সংখ্যার মধ্যে হতে হবে');
+      if (!playerName) {
+        alert('অনুগ্রহ করে আপনার গেম নাম লিখুন।');
         return;
       }
-      if (!name) {
-        alert('গেমে কি নাম দেয়া আছে? নাম লিখুন');
-        return;
-      }
-      if (diamondSelect.selectedOptions.length === 0) {
-        alert('কমপক্ষে একটি প্যাকেজ সিলেক্ট করুন');
-        return;
-      }
-      if (!paymentMethod) {
-        alert('পেমেন্ট মেথড নির্বাচন করুন');
-        return;
-      }
-      if (!paymentDetails) {
-        alert('পেমেন্ট ডিটেইলস দেখুন এবং নির্বাচন করুন');
-        return;
-      }
-      if (totalPrice <= 0) {
-        alert('সঠিক প্যাকেজ সিলেক্ট করুন');
-        return;
-      }
-      if (!captchaInput) {
-        alert('ক্যাপচা উত্তর দিন');
-        return;
-      }
-      if (parseInt(captchaInput, 10) !== captchaAnswer) {
-        alert('ক্যাপচা ভুল হয়েছে, দয়া করে আবার চেষ্টা করুন');
-        generateCaptcha();
+      if (!paymentNumber.match(/^\d{11}$/)) {
+        alert('১১ ডিজিটের সঠিক পেমেন্ট নাম্বার লিখুন।');
         return;
       }
 
-      // লোডিং স্পিনার চালু
-      loadingSpinner.style.display = 'block';
-      submitBtn.disabled = true;
-
-      const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n
-UID: ${uid}\n
-নাম: ${name}\n
-প্যাকেজ:\n${selectedDiamonds}\n
-মোট দাম: ${totalPrice} BDT\n
-পেমেন্ট মেথড: ${paymentMethod}\n
-অর্ডারের সময়: ${orderTime}`;
-
-      if (!confirm(confirmMsg)) {
-        loadingSpinner.style.display = 'none';
-        submitBtn.disabled = false;
+      // At least one package must be selected
+      if (
+        diamondSelect.selectedOptions.length === 0 &&
+        weeklyMonthlySelect.selectedOptions.length === 0 &&
+        levelUpSelect.selectedOptions.length === 0 &&
+        evoAccessSelect.selectedOptions.length === 0
+      ) {
+        alert('অনুগ্রহ করে একটি প্যাকেজ সিলেক্ট করুন।');
         return;
       }
 
-      const message = `✅ New Order:
-🆔 UID: ${uid}
-👤 নাম: ${name}
-💎 প্যাকেজ:
-${selectedDiamonds}
-💰 মোট দাম: ${totalPrice} BDT
-💳 পেমেন্ট মেথড: ${paymentMethod}
-📋 পেমেন্ট ডিটেইলস:
-${paymentDetails}
-⏰ অর্ডারের সময়: ${orderTime}`;
-      // সফল বার্তা দেখান
-      thankYouMessage.textContent = 'অর্ডার সফল হয়েছে, ধন্যবাদ! মাসুদের পক্ষ থেকে শুভকামনা';
-const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
-window.open(whatsappUrl, '_blank');
+      showLoading(true);
 
-      // ফর্ম রিসেট করুন
-      document.getElementById('uid').value = '';
-      document.getElementById('playerName').value = '';
-      diamondSelect.selectedIndex = -1;
-      calculateTotal();
-      document.getElementById('paymentMethod').selectedIndex = 0;
-      document.getElementById('paymentDetails').value = '';
-      generateCaptcha();
-      document.getElementById('captchaInput').value = '';
+      setTimeout(() => {
+        // Prepare order details string
+        let details = `UID: ${uid}\n`;
+        details += `Name: ${playerName}\n\n`;
+        details += `Selected Packages:\n`;
 
-      // লোডিং স্পিনার বন্ধ
-      loadingSpinner.style.display = 'none';
-      submitBtn.disabled = false;
-    }
+        function listSelectedOptions(selectBox) {
+          return Array.from(selectBox.selectedOptions).map(opt => opt.text).join('\n');
+        }
+
+        if(diamondSelect.selectedOptions.length) {
+          details += `\nDiamond Packages:\n${listSelectedOptions(diamondSelect)}\n`;
+        }
+        if(weeklyMonthlySelect.selectedOptions.length) {
+          details += `\nWeekly & Monthly Packages:\n${listSelectedOptions(weeklyMonthlySelect)}\n`;
+        }
+        if(levelUpSelect.selectedOptions.length) {
+          details += `\nLevel Up Packages:\n${listSelectedOptions(levelUpSelect)}\n`;
+        }
+        if(evoAccessSelect.selectedOptions.length) {
+          details += `\nEvo Access Packages:\n${listSelectedOptions(evoAccessSelect)}\n`;
+        }
+
+        details += `\nTotal Price: ${document.getElementById('totalPrice').textContent.replace('মোট মূল্য: ', '')}`;
+        details += `\nPayment Number: ${paymentNumber}\n`;
+
+        document.getElementById('paymentDetails').value = details;
+
+        // Set order time
+        document.getElementById('orderTime').value = 'অর্ডার সময়: ' + formatTime(new Date());
+
+        document.getElementById('thankYouMessage').textContent = 'ধন্যবাদ! আপনার অর্ডার গ্রহণ করা হয়েছে।';
+
+        showLoading(false);
+      }, 1000);
+    });
+
+    // Initialize total on page load
+    calculateTotal();
   </script>
 </body>
 </html>
