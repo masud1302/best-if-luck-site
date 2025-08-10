@@ -468,16 +468,22 @@ UID: ${uid}\n
         return;
       }
 
-      // WhatsApp URL
-      const whatsappMessage = `New Order:\n\nUID:\n${uid}\n\nনাম:\n${name}\n\nপেমেন্ট মেথড:\n${paymentDetails}\n\nমোট মূল্য: ${totalPrice} BDT\n\nপেমেন্ট মেথড:\n${paymentDetails}\n\nঅর্ডারের সময়:\n${orderTime}\n\nআপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
-      const whatsappNumber = '8801580495595'; 
-      const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      const message = `✅ New Order:
+🆔 UID: ${uid}
+👤 নাম: ${name}
+💎 প্যাকেজ:
+${selectedDiamonds}
+💰 মোট দাম: ${totalPrice} BDT
+💳 পেমেন্ট মেথড: ${paymentMethod}
+📋 পেমেন্ট ডিটেইলস:
+${paymentDetails}
+⏰ অর্ডারের সময়: ${orderTime}`;
+const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
+window.open(whatsappUrl, '_blank');
 
-      // ওপেন উইন্ডোতে WhatsApp URL
-      window.open(whatsappURL, '_blank');
 
       // সফল বার্তা দেখান
-      thankYouMessage.textContent = 'অর্ডার সফল হয়েছে, ধন্যবাদ!';
+      thankYouMessage.textContent = 'অর্ডার সফল হয়েছে, ধন্যবাদ! মাসুদের পক্ষ থেকে শুভকামনা';
 
       // ফর্ম রিসেট করুন
       document.getElementById('uid').value = '';
