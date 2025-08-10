@@ -313,16 +313,100 @@ M Masud
     });
 
     // Format current time to readable string
-    function formatTime(date) {
-      return date.toLocaleString('bn-BD', {
+    function updateTime() {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Dhaka',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit'
-      });
+        second: '2-digit',
+        hour12: false,
+      };
+      const formatted = now.toLocaleString('bn-BD', options);
+      document.getElementById('orderTime').value = formatted;
     }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    function calculateTotal() {
+      const diamondSelect = document.getElementById('diamondSelect');
+      let total = 0;
+      for (const option of diamondSelect.selectedOptions) {
+        total += parseInt(option.getAttribute('data-price'), 10) || 0;
+      }
+      document.getElementById('totalPrice').textContent = `মোট দাম: ${total} BDT`;
+      return total;
+    }
+
+    function showPaymentDetails() {
+      const paymentMethod = document.getElementById('paymentMethod').value;
+      const paymentDetails = document.getElementById('paymentDetails');
+
+      let detailsText = '';
+
+      switch (paymentMethod) {
+        case 'Bkash/Nagad':
+          detailsText = 'Bkash/Nagad\nনাম: MASUD\nনম্বর: 01580495595';
+          break;
+        case 'Rocket':
+          detailsText = 'Rocket\nনাম: MASUD\nনম্বর: 01316019861';
+          break;
+        case 'Upay':
+          detailsText = 'Upay\nনাম: MASUD\nনম্বর: 01316019861';
+          break;
+        case 'Dhaka Bank':
+          detailsText =
+            'Dhaka Bank\n' +
+            'নাম: MD MAHFUZUL ISLAM\n' +
+            'একাউন্ট নাম্বার: 4111100035349\n' +
+            'ব্রাঞ্চ: Bogura';
+          break;
+        case 'UCB Bank':
+          detailsText =
+            'UCB Bank\n' +
+            'নাম: PREMIUM CYBER GALAXY\n' +
+            'একাউন্ট নাম্বার: 0072101000007006\n' +
+            'ব্রাঞ্চ: -';
+          break;
+        case 'IFIC Bank':
+          detailsText =
+            'IFIC Bank\n' +
+            'নাম: MD MAHFUZUL ISLAM\n' +
+            'একাউন্ট নাম্বার: 0230107830851\n' +
+            'ব্রাঞ্চ: Bogura';
+          break;
+        default:
+          detailsText = '';
+      }
+
+      paymentDetails.value = detailsText;
+    }
+
+    function copyPaymentDetails() {
+      const paymentDetails = document.getElementById('paymentDetails');
+      paymentDetails.select();
+      paymentDetails.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(paymentDetails.value).then(
+        () => alert('পেমেন্ট ডিটেইল কপি করা হয়েছে!'),
+        () => alert('কপি করতে সমস্যা হয়েছে। অনুগ্রহ করে ম্যানুয়ালি কপি করুন।')
+      );
+    }
+
+    function submitOrder() {
+      thankYouMessage.textContent = '';
+      const uid = document.getElementById('uid').value.trim();
+      const name = document.getElementById('playerName').value.trim();
+      const diamondSelect = document.getElementById('diamondSelect');
+      const selectedDiamonds = Array.from(diamondSelect.selectedOptions)
+        .map((option, index) => `${index + 1}. ${option.text}`)
+        .join('\n');
+      const paymentMethod = document.getElementById('paymentMethod').value;
+      const paymentDetails = document.getElementById('paymentDetails').value;
+      const orderTime = document.getElementById('orderTime').value;
+      const totalPrice = calculateTotal();
 
     // Show loading spinner
     function showLoading(show) {
@@ -348,10 +432,24 @@ M Masud
         alert('অনুগ্রহ করে আপনার গেম নাম লিখুন।');
         return;
       }
-      if (!paymentNumber.match(/^\d{11}$/)) {
-        alert('১১ ডিজিটের সঠিক পেমেন্ট নাম্বার লিখুন।');
+      if (diamondSelect.selectedOptions.length === 0) {
+        alert('কমপক্ষে একটি প্যাকেজ সিলেক্ট করুন');
         return;
       }
+      if (!paymentMethod) {
+        alert('পেমেন্ট মেথড নির্বাচন করুন');
+        return;
+      }
+      if (!paymentDetails) {
+        alert('পেমেন্ট ডিটেইলস দেখুন এবং নির্বাচন করুন');
+        return;
+      }
+      if (totalPrice <= 0) {
+        alert('সঠিক প্যাকেজ সিলেক্ট করুন');
+        return;
+        // লোডিং স্পিনার চালু
+      loadingSpinner.style.display = 'block';
+      submitBtn.disabled = true;
 
       // At least one package must be selected
       if (
@@ -363,6 +461,43 @@ M Masud
         alert('অনুগ্রহ করে একটি প্যাকেজ সিলেক্ট করুন।');
         return;
       }
+         const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n
+UID: ${uid}\n
+নাম: ${name}\n
+প্যাকেজ:\n${selectedDiamonds}\n
+মোট দাম: ${totalPrice} BDT\n
+পেমেন্ট মেথড: ${paymentMethod}\n
+অর্ডারের সময়: ${orderTime}`;
+
+      if (!confirm(confirmMsg)) {
+        loadingSpinner.style.display = 'none';
+        submitBtn.disabled = false;
+        return;
+      }
+        const message = `✅ New Order:
+🆔 UID: ${uid}
+👤 নাম: ${name}
+💎 প্যাকেজ:
+${selectedDiamonds}
+💰 মোট দাম: ${totalPrice} BDT
+💳 পেমেন্ট মেথড: ${paymentMethod}
+📋 পেমেন্ট ডিটেইলস:
+${paymentDetails}
+⏰ অর্ডারের সময়: ${orderTime}`;
+      // সফল বার্তা দেখান
+      thankYouMessage.textContent = 'অর্ডার সফল হয়েছে, ধন্যবাদ! মাসুদের পক্ষ থেকে শুভকামনা';
+const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
+window.open(whatsappUrl, '_blank');
+
+      // ফর্ম রিসেট করুন
+      document.getElementById('uid').value = '';
+      document.getElementById('playerName').value = '';
+      diamondSelect.selectedIndex = -1;
+      calculateTotal();
+      document.getElementById('paymentMethod').selectedIndex = 0;
+      document.getElementById('paymentDetails').value = '';
+      generateCaptcha();
+      document.getElementById('captchaInput').value = '';
 
       showLoading(true);
 
