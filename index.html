@@ -5,181 +5,201 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BEST OF LUCK DIAMOND TOP UP</title>
   <style>
-    :root{
-      --primary:#28a745;
-      --accent:#007bff;
-      --danger:#ff6600;
-      --muted:#f0f0f0;
-      --bg: skyblue;
-    }
     body {
-      background-color: var(--bg);
+      background-color: skyblue;
       font-family: 'Arial', sans-serif;
       text-align: center;
-      padding: 12px;
+      padding: 15px;
       margin: 0;
     }
     .container {
       background: white;
       border-radius: 10px;
-      padding: 18px;
+      padding: 20px;
       max-width: 520px;
-      margin: 14px auto;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
     }
-    h2 { margin: 0 0 10px 0; color: #0b5; }
-    label, p { margin: 8px 0 4px; text-align: left; font-weight: 600; }
     input, select, textarea, button {
-      font-size: 15px;
+      font-size: 16px;
       box-sizing: border-box;
-      border-radius: 6px;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      font-family: inherit;
     }
-    input[type="text"], select {
+    input, select {
       width: 100%;
-      padding: 10px;
-      margin-top: 6px;
+      padding: 12px;
+      margin-top: 10px;
     }
     textarea {
+      resize: none;
+      cursor: pointer;
+      font-family: monospace;
+      user-select: all;
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
-      height: 130px;
-      resize: vertical;
-      font-family: monospace;
-      font-size: 14px;
-    }
-    input[readonly], textarea[readonly] { background: var(--muted); cursor: default; }
-    #totalPrice {
       margin-top: 10px;
-      font-weight: 700;
-      font-size: 16px;
-      color: #155724;
-      background: #e9f7ee;
-      border: 1px solid #c3e6cb;
-      padding: 8px;
-      border-radius: 6px;
-      text-align: left;
+      height: 140px;
     }
-
-    /* payment details + small square copy button */
-    .payment-wrap {
+    input[readonly], textarea[readonly] {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+      user-select: none;
       position: relative;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #totalPrice {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #155724;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: 10px;
+      border-radius: 5px;
+      user-select: none;
+    }
+    #paymentDetailsContainer {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
       margin-top: 10px;
     }
     #paymentDetails {
-      padding-right: 48px; /* space for small button */
-      min-height: 120px;
-    }
-    .icon-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 36px;
-      height: 36px;
+      flex: 1;
+      resize: none;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
       border-radius: 6px;
+      border: 1px solid #ccc;
+      height: 140px;
+      user-select: all;
+    }
+    #copyBtn {
+      background-color: #007bff;
+      color: white;
       border: none;
-      display: inline-flex;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      height: 36px;
+      margin-top: 6px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      flex-shrink: 0;
+      width: 44px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #copyBtn:hover {
+      background-color: #0056b3;
+    }
+    #captchaSection {
+      margin-top: 15px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-      background: var(--accent);
-      color: white;
-      font-weight: 700;
-      font-size: 15px;
-      padding: 0;
+      gap: 10px;
+      flex-wrap: wrap;
     }
-    .icon-btn.small {
-      width: 34px;
-      height: 34px;
-      font-size: 14px;
-      right: 10px;
-      top: 10px;
+    #captchaQuestion {
+      font-weight: bold;
+      font-size: 18px;
+      margin-left: 5px;
     }
-    .icon-btn.copy { background: var(--accent); }
-    .icon-btn.copy:hover { background: #0056b3; }
-    .icon-btn.refresh { background: var(--danger); }
-    .icon-btn.refresh:hover { background: #cc5200; }
-
-    /* captcha area with small refresh button to the right of question */
-    .captcha-row {
-      display:flex;
-      gap:8px;
-      align-items:center;
-      margin-top:10px;
-      flex-wrap:wrap;
-      justify-content: flex-start;
-    }
-    .captcha-box {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      background:#f6f9fb;
-      border-radius:6px;
-      border:1px solid #e2e8f0;
-      font-weight:700;
-      font-size:16px;
-    }
-    .captcha-input {
+    #captchaInput {
+      width: 100%;
       max-width: 220px;
-      width: 100%;
-      padding:10px;
-      border-radius:6px;
-      border:1px solid #ccc;
-      margin-left:6px;
-    }
-
-    /* submit & spinner */
-    #submitBtn {
-      margin-top: 14px;
-      background: var(--primary);
-      color: white;
-      border: none;
       padding: 12px;
-      width: 100%;
-      border-radius: 8px;
+      margin-top: 10px;
       font-size: 16px;
-      cursor: pointer;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
-    #submitBtn:disabled { opacity: 0.7; cursor: not-allowed; }
-
+    #orderTime {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+    }
+    #thankYouMessage {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 20px;
+      color: green;
+      min-height: 28px;
+      user-select: none;
+    }
+    /* Loading spinner styles */
     #loadingSpinner {
       display: none;
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%,-50%);
-      border: 6px solid rgba(0,0,0,0.06);
+      transform: translate(-50%, -50%);
+      border: 6px solid #f3f3f3;
       border-top: 6px solid #3498db;
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       animation: spin 1s linear infinite;
-      z-index: 30;
-      background: white;
-      padding: 6px;
+      z-index: 10;
     }
-    @keyframes spin { 0%{transform:translate(-50%,-50%) rotate(0)} 100%{transform:translate(-50%,-50%) rotate(360deg)} }
-
-    #thankYouMessage {
-      margin-top: 16px;
-      font-weight: 800;
-      font-size: 18px;
-      color: #155724;
-      min-height: 28px;
-      line-height: 1.3;
-      text-align: center;
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg);}
+      100% { transform: translate(-50%, -50%) rotate(360deg);}
     }
-
-    /* Responsive adjustments */
-    @media (max-width:520px){
-      .icon-btn { width:34px; height:34px; font-size:13px; right:8px; top:8px; }
-      .captcha-input { max-width: 100%; }
-      #paymentDetails { padding-right: 46px; }
+    @media(max-width: 600px) {
+      body, .container {
+        padding: 10px;
+        margin: 0 5px;
+      }
+      input, select, textarea, button {
+        font-size: 14px;
+        padding: 10px;
+      }
+      #paymentDetailsContainer {
+        flex-direction: column;
+      }
+      #copyBtn {
+        margin-left: 0;
+        margin-top: 8px;
+        width: 100%;
+        height: 40px;
+      }
+      #captchaSection {
+        flex-direction: column;
+      }
+    }
+    p.note {
+      font-size: 13px; 
+      color: red; 
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -187,16 +207,24 @@
   <div class="container">
     <h2>BEST OF LUCK DIAMOND TOP UP</h2>
 
-    <label>আপনার ফ্রি ফায়ার UID লিখুন:</label>
-    <input id="uid" type="text" placeholder="UID (শুধু ৯-১১ সংখ্যার)" maxlength="11"
-           oninput="this.value = this.value.replace(/[^0-9]/g,'')" autocomplete="off" />
+    <p>আপনার ফ্রি ফায়ার UID লিখুন:</p>
+    <input
+      type="text"
+      id="uid"
+      placeholder="UID (শুধু ৯-১১ সংখ্যার)"
+      maxlength="11"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+      title="শুধু সংখ্যা লিখুন"
+      autocomplete="off"
+      required
+    />
 
-    <label>গেমে কি নাম দেয়া আছে?</label>
-    <input id="playerName" type="text" placeholder="আপনার গেম নাম" autocomplete="off" />
+    <p>গেমে কি নাম দেয়া আছে?</p>
+    <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" autocomplete="off" required />
 
-    <label>প্যাকেজ সিলেক্ট করুন:</label>
-    <select id="diamondSelect" multiple size="12" onchange="calculateTotal()">
-      <!-- Diamond -->
+    <p>প্যাকেজ সিলেক্ট করুন:</p>
+    <select id="diamondSelect" multiple size="10" required onchange="calculateTotal()">
+      <!-- ডায়মন্ড প্যাকেজ -->
       <option data-price="25">25 Diamond = 25 BDT</option>
       <option data-price="40">50 Diamond = 40 BDT</option>
       <option data-price="82">115 Diamond = 82 BDT</option>
@@ -212,8 +240,8 @@
       <option data-price="3124">5060 Diamond = 3124 BDT</option>
       <option data-price="6240">10120 Diamond = 6240 BDT</option>
 
-      <!-- Level Up & passes -->
-      <option data-price="39">☞ Level Up-6 ➪ 39 BDT</option>
+      <!-- Level Up প্যাকেজ -->
+      <option data-price="39">☞ Level Up-6   ➪ 39 BDT</option>
       <option data-price="67">☞ Level Up-10 ➪ 67 BDT</option>
       <option data-price="67">☞ Level Up-15 ➪ 67 BDT</option>
       <option data-price="67">☞ Level Up-20 ➪ 67 BDT</option>
@@ -221,7 +249,7 @@
       <option data-price="95">☞ Level Up-30 ➪ 95 BDT</option>
       <option data-price="390">☞ Level Up pass full 1270 DM ➪ 390 BDT</option>
 
-      <!-- Other passes -->
+      <!-- Monthly and Weekly Packages -->
       <option data-price="768">Monthly = 768 BDT</option>
       <option data-price="1530">Monthly 2x = 1530 BDT</option>
       <option data-price="165">Weekly = 165 BDT</option>
@@ -237,113 +265,139 @@
       <option data-price="107">7 Days Evo Access = 107 BDT</option>
       <option data-price="308">30 Days Evo Access = 308 BDT</option>
     </select>
+    <p class="note">
+      বি:দ্র: যদি আইডিতে লেভেল আপ পাস Show করে
+    </p>
 
     <div id="totalPrice">মোট দাম: 0 BDT</div>
 
-    <label>পেমেন্ট মেথড সিলেক্ট করুন:</label>
-    <select id="paymentMethod" onchange="showPaymentDetails()">
-      <option value="">-- নির্বাচন করুন --</option>
-      <option value="Bkash/Nagad">Bkash/Nagad</option>
-      <option value="Rocket">Rocket</option>
-      <option value="Upay">Upay</option>
+    <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
+    <select id="paymentMethod" required onchange="showPaymentDetails()">
+      <option value="" disabled selected>-- নির্বাচন করুন --</option>
+      <option value="Bkash/Nagad">Bkash/Nagad = 01580495595</option>
+      <option value="Rocket">Rocket = 01316019861</option>
+      <option value="Upay">Upay = 01316019861</option>
       <option value="Dhaka Bank">Dhaka Bank</option>
       <option value="UCB Bank">UCB Bank</option>
       <option value="IFIC Bank">IFIC Bank</option>
     </select>
 
-    <div class="payment-wrap">
-      <textarea id="paymentDetails" readonly placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"></textarea>
-      <button class="icon-btn copy" id="copyBtn" title="কপি করুন" onclick="copyPaymentDetails()">📋</button>
+    <div id="paymentDetailsContainer">
+      <textarea
+        id="paymentDetails"
+        readonly
+        title="ক্লিক করে কপি করুন"
+        placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"
+      ></textarea>
+      <button id="copyBtn" onclick="copyPaymentDetails()" title="কপি করুন">📋</button>
     </div>
 
-    <div class="captcha-row">
-      <div class="captcha-box" aria-hidden="true">ক্যাপচা: <span id="captchaQuestion">--</span></div>
-      <button class="icon-btn refresh" id="refreshCaptchaBtn" title="রিফ্রেশ" onclick="generateCaptcha()">🔄</button>
-      <input id="captchaInput" class="captcha-input" type="text" placeholder="ক্যাপচা লিখুন" autocomplete="off">
+    <div id="captchaSection">
+      <p>ক্যাপচা (সহজ যোগ): <span id="captchaQuestion"></span></p>
+      <input type="text" id="captchaInput" placeholder="উত্তর লিখুন" autocomplete="off" />
     </div>
 
-    <label>অর্ডারের সময় ও তারিখ (BDT):</label>
-    <input id="orderTime" type="text" readonly />
+    <p>অর্ডারের সময় ও তারিখ:</p>
+    <input type="text" id="orderTime" readonly />
 
     <button id="submitBtn" onclick="submitOrder()">সাবমিট করুন</button>
 
     <div id="loadingSpinner"></div>
 
-    <div id="thankYouMessage"></div>
+    <p id="thankYouMessage"></p>
   </div>
 
   <script>
-    // elements
+    let captchaAnswer = 0;
     const loadingSpinner = document.getElementById('loadingSpinner');
     const submitBtn = document.getElementById('submitBtn');
     const thankYouMessage = document.getElementById('thankYouMessage');
 
-    // 1) Time update every second (Asia/Dhaka)
     function updateTime() {
       const now = new Date();
-      const options = { timeZone: 'Asia/Dhaka', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false };
-      document.getElementById('orderTime').value = now.toLocaleString('bn-BD', options);
+      const options = {
+        timeZone: 'Asia/Dhaka',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      };
+      const formatted = now.toLocaleString('bn-BD', options);
+      document.getElementById('orderTime').value = formatted;
     }
-    updateTime();
     setInterval(updateTime, 1000);
+    updateTime();
 
-    // 2) Calculate total
-    function calculateTotal(){
-      const sel = document.getElementById('diamondSelect');
+    function calculateTotal() {
+      const diamondSelect = document.getElementById('diamondSelect');
       let total = 0;
-      for(const opt of sel.selectedOptions){
-        total += parseInt(opt.getAttribute('data-price')||0, 10);
+      for (const option of diamondSelect.selectedOptions) {
+        total += parseInt(option.getAttribute('data-price'), 10) || 0;
       }
       document.getElementById('totalPrice').textContent = `মোট দাম: ${total} BDT`;
       return total;
     }
 
-    // 3) Payment details fill
-    function showPaymentDetails(){
-      const method = document.getElementById('paymentMethod').value;
-      const out = document.getElementById('paymentDetails');
-      let text = '';
-      switch(method){
-        case 'Bkash/Nagad': text = 'Bkash/Nagad\nনম্বর: 01580495595'; break;
-        case 'Rocket': text = 'Rocket\nনম্বর: 01316019861'; break;
-        case 'Upay': text = 'Upay\nনম্বর: 01316019861'; break;
+    function showPaymentDetails() {
+      const paymentMethod = document.getElementById('paymentMethod').value;
+      const paymentDetails = document.getElementById('paymentDetails');
+
+      let detailsText = '';
+
+      switch (paymentMethod) {
+        case 'Bkash/Nagad':
+          detailsText = 'Bkash/Nagad নম্বর:\n01580495595';
+          break;
+        case 'Rocket':
+          detailsText = 'Rocket নম্বর:\n01316019861';
+          break;
+        case 'Upay':
+          detailsText = 'Upay নম্বর:\n01316019861';
+          break;
         case 'Dhaka Bank':
-          text = 'Dhaka Bank\nনাম: MD MAHFUZUL ISLAM\nএকাউন্ট: 4111100035349\nব্রাঞ্চ: Bogura';
+          detailsText =
+            'Dhaka Bank\n' +
+            'নাম: MD MAHFUZUL ISLAM\n' +
+            'একাউন্ট নাম্বার: 4111100035349\n' +
+            'ব্রাঞ্চ: Bogura';
           break;
         case 'UCB Bank':
-          text = 'UCB Bank\nনাম: PREMIUM CYBER GALAXY\nএকাউন্ট: 0072101000007006\nব্রাঞ্চ: -';
+          detailsText =
+            'UCB Bank\n' +
+            'নাম: PREMIUM CYBER GALAXY\n' +
+            'একাউন্ট নাম্বার: 0072101000007006\n' +
+            'ব্রাঞ্চ: -';
           break;
         case 'IFIC Bank':
-          text = 'IFIC Bank\nনাম: MD MAHFUZUL ISLAM\nএকাউন্ট: 0230107830851\nব্রাঞ্চ: Bogura';
+          detailsText =
+            'IFIC Bank\n' +
+            'নাম: MD MAHFUZUL ISLAM\n' +
+            'একাউন্ট নাম্বার: 0230107830851\n' +
+            'ব্রাঞ্চ: Bogura';
           break;
-        default: text = '';
+        default:
+          detailsText = '';
       }
-      out.value = text;
+
+      paymentDetails.value = detailsText;
     }
 
-    // 4) copy payment details (with fallback)
-    function copyPaymentDetails(){
-      const out = document.getElementById('paymentDetails');
-      const val = out.value || '';
-      if(!val){
-        alert('পেমেন্ট ডিটেইল শো করুন ও তারপর কপি করুন।');
-        return;
-      }
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(val).then(()=> alert('পেমেন্ট ডিটেইল কপি করা হয়েছে!'), ()=> alert('কপি করতে সমস্যা হয়েছে।'));
-      } else {
-        out.select();
-        try { document.execCommand('copy'); alert('পেমেন্ট ডিটেইল কপি করা হয়েছে!'); }
-        catch(e){ alert('কপি করতে ব্যর্থ। অনুগ্রহ করে ম্যানুয়ালি কপি করুন।'); }
-      }
+    function copyPaymentDetails() {
+      const paymentDetails = document.getElementById('paymentDetails');
+      paymentDetails.select();
+      paymentDetails.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(paymentDetails.value).then(
+        () => alert('পেমেন্ট ডিটেইল কপি করা হয়েছে!'),
+        () => alert('কপি করতে সমস্যা হয়েছে। অনুগ্রহ করে ম্যানুয়ালি কপি করুন।')
+      );
     }
 
-    // 5) Captcha generate + auto-refresh every 30s
-    let captchaAnswer = 0;
-    function generateCaptcha(){
-      // small numeric addition captcha (1-20 + 1-20)
-      const a = Math.floor(Math.random()*20)+1;
-      const b = Math.floor(Math.random()*20)+1;
+    function generateCaptcha() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
       captchaAnswer = a + b;
       document.getElementById('captchaQuestion').textContent = `${a} + ${b} = ?`;
       document.getElementById('captchaInput').value = '';
@@ -351,87 +405,85 @@
     generateCaptcha();
     setInterval(generateCaptcha, 30000);
 
-    // 6) submitOrder -> validation, spinner, open WhatsApp, thank you
-    function submitOrder(){
+    function submitOrder() {
       thankYouMessage.textContent = '';
       const uid = document.getElementById('uid').value.trim();
       const name = document.getElementById('playerName').value.trim();
-      const sel = document.getElementById('diamondSelect');
-      const selected = Array.from(sel.selectedOptions).map((o,i)=>`${i+1}. ${o.text}`).join('\n');
+      const diamondSelect = document.getElementById('diamondSelect');
+      const selectedDiamonds = Array.from(diamondSelect.selectedOptions)
+        .map((option, index) => `${index + 1}. ${option.text}`)
+        .join('\n');
       const paymentMethod = document.getElementById('paymentMethod').value;
       const paymentDetails = document.getElementById('paymentDetails').value;
       const orderTime = document.getElementById('orderTime').value;
       const totalPrice = calculateTotal();
-      const capInput = document.getElementById('captchaInput').value.trim();
+      const captchaInput = document.getElementById('captchaInput').value.trim();
 
-      // validations
-      if(!uid){ alert('UID লিখুন'); return; }
-      if(!/^\d{9,11}$/.test(uid)){ alert('UID অবশ্যই ৯-১১ সংখ্যার মধ্যে হতে হবে'); return; }
-      if(!name){ alert('গেমে নাম লিখুন'); return; }
-      if(sel.selectedOptions.length === 0){ alert('কমপক্ষে একটি প্যাকেজ সিলেক্ট করুন'); return; }
-      if(!paymentMethod){ alert('পেমেন্ট মেথড নির্বাচন করুন'); return; }
-      if(!paymentDetails){ alert('পেমেন্ট ডিটেইল দেখুন এবং নির্বাচন করুন'); return; }
-      if(totalPrice <= 0){ alert('সঠিক প্যাকেজ সিলেক্ট করুন'); return; }
-      if(!capInput){ alert('ক্যাপচা উত্তর দিন'); return; }
-      if(parseInt(capInput,10) !== captchaAnswer){ alert('ক্যাপচা ভুল হয়েছে'); generateCaptcha(); return; }
-
-      // show spinner + disable
-      loadingSpinner.style.display = 'block';
-      submitBtn.disabled = true;
-
-      const confirmMsg = `আপনি কি নিশ্চিত যে অর্ডার করতে চান?\n\nUID: ${uid}\nনাম: ${name}\nপ্যাকেজ:\n${selected}\nমোট দাম: ${totalPrice} BDT\nপেমেন্ট মেথড: ${paymentMethod}\nঅর্ডারের সময়: ${orderTime}`;
-      if(!confirm(confirmMsg)){
-        loadingSpinner.style.display = 'none';
-        submitBtn.disabled = false;
+      if (!uid) {
+        alert('UID লিখুন');
+        return;
+      }
+      if (!/^\d{9,11}$/.test(uid)) {
+        alert('UID অবশ্যই ৯ থেকে ১১ সংখ্যার মধ্যে হতে হবে');
+        return;
+      }
+      if (!name) {
+        alert('গেমে কি নাম দেয়া আছে? নাম লিখুন');
+        return;
+      }
+      if (diamondSelect.selectedOptions.length === 0) {
+        alert('কমপক্ষে একটি প্যাকেজ সিলেক্ট করুন');
+        return;
+      }
+      if (!paymentMethod) {
+        alert('পেমেন্ট মেথড নির্বাচন করুন');
+        return;
+      }
+      if (!paymentDetails) {
+        alert('পেমেন্ট ডিটেইলস দেখুন এবং নির্বাচন করুন');
+        return;
+      }
+      if (totalPrice <= 0) {
+        alert('সঠিক প্যাকেজ সিলেক্ট করুন');
+        return;
+      }
+      if (!captchaInput) {
+        alert('ক্যাপচা উত্তর দিন');
+        return;
+      }
+      if (parseInt(captchaInput, 10) !== captchaAnswer) {
+        alert('ক্যাপচা ভুল হয়েছে, দয়া করে আবার চেষ্টা করুন');
+        generateCaptcha();
         return;
       }
 
-      // construct whatsapp message with emojis and line breaks
-      const message = `✅ অর্ডার এসেছে:
-🆔 UID: ${uid}
-👤 নাম: ${name}
-💎 প্যাকেজ:
-${selected}
-💰 মোট দাম: ${totalPrice} BDT
-💳 পেমেন্ট মেথড: ${paymentMethod}
-📋 পেমেন্ট ডিটেইলস:
-${paymentDetails}
-⏰ অর্ডারের সময়: ${orderTime}`;
+      // Show spinner & disable submit button
+      loadingSpinner.style.display = 'block';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'অর্ডার প্রক্রিয়াধীন...';
 
-      // open whatsapp
-      const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
-
-      // simulate short processing time then show thank you
-      setTimeout(()=>{
+      setTimeout(() => {
         loadingSpinner.style.display = 'none';
         submitBtn.disabled = false;
-        thankYouMessage.textContent = "অর্ডার করার জন্য ধন্যবাদ।\nমাসুদের পক্ষ থেকে শুভকামনা।";
-        // show with newline
-        thankYouMessage.style.whiteSpace = 'pre-line';
-        clearForm();
-        generateCaptcha();
-      }, 900);
-    }
+        submitBtn.textContent = 'সাবমিট করুন';
 
-    // 7) clear form
-    function clearForm(){
-      document.getElementById('uid').value = '';
-      document.getElementById('playerName').value = '';
-      const sel = document.getElementById('diamondSelect');
-      for(const opt of sel.options) opt.selected = false;
-      document.getElementById('paymentMethod').value = '';
-      document.getElementById('paymentDetails').value = '';
-      document.getElementById('totalPrice').textContent = 'মোট দাম: 0 BDT';
-      document.getElementById('captchaInput').value = '';
-    }
+        // Generate order summary
+        const orderSummary =
+          `অর্ডার এসেছে:\n\n` +
+          `UID:\n${uid}\n\n` +
+          `নাম:\n${name}\n\n` +
+          `প্যাকেজ:\n${selectedDiamonds}\n\n` +
+          `মোট মূল্য: ${totalPrice} BDT\n\n` +
+          `পেমেন্ট মেথড:\n${paymentMethod}\n\n` +
+          `অর্ডারের সময়:\n${orderTime}\n\n` +
+          `আপনার অর্ডার সফল হয়েছে, ধন্যবাদ!`;
 
-    // wire-up events
-    document.getElementById('paymentMethod').addEventListener('change', showPaymentDetails);
-    document.getElementById('copyBtn').addEventListener('click', copyPaymentDetails);
-    document.getElementById('refreshCaptchaBtn').addEventListener('click', generateCaptcha);
-    // calculate total on load in case default selections
-    calculateTotal();
+        thankYouMessage.textContent = 'আপনার অর্ডার সফল হয়েছে, ধন্যবাদ!';
+
+        // Show summary in payment details textarea for copy convenience
+        document.getElementById('paymentDetails').value = orderSummary;
+      }, 2500);
+    }
   </script>
 </body>
 </html>
