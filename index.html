@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BEST IF LUCK DIAMOND TOP UP</title>
+  <title>BEST OF LUCK DIAMOND TOP UP</title>
   <style>
     body {
       background-color: skyblue;
@@ -52,7 +52,7 @@
     <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" required />
 
     <p>প্যাকেজ সিলেক্ট করুন:</p>
-    <select id="diamondSelect">
+    <select id="diamondSelect" multiple required>
       <option value="25 Diamond = 25 BDT">25 Diamond = 25 BDT</option>
       <option value="50 Diamond = 39 BDT">50 Diamond = 39 BDT</option>
       <option value="115 Diamond = 82 BDT">115 Diamond = 82 BDT</option>
@@ -69,7 +69,6 @@
     <select id="paymentMethod" required>
       <option value="" disabled selected>-- নির্বাচন করুন --</option>
       <option value="Bkash/Nagad = 01580495595">Bkash/Nagad = 01580495595</option>
-      <option value="Cash on Delivery">Cash on Delivery</option>
     </select>
 
     <p>অর্ডারের সময় ও তারিখ:</p>
@@ -93,7 +92,8 @@
     function submitOrder() {
       const uid = document.getElementById('uid').value;
       const name = document.getElementById('playerName').value;
-      const diamond = document.getElementById('diamondSelect').value;
+      const diamondSelect = document.getElementById('diamondSelect');
+      const selectedDiamonds = Array.from(diamondSelect.selectedOptions).map(option => option.value).join(', ');
       const payment = document.getElementById('paymentMethod').value;
       const orderTime = document.getElementById('orderTime').value;
 
@@ -110,7 +110,7 @@
         return;
       }
 
-      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ: ${diamond}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
+      const message = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ: ${selectedDiamonds}\n💰 পেমেন্ট মেথড: ${payment}\n⏰ অর্ডারের সময়: ${orderTime}`;
       const whatsappUrl = `https://wa.me/8801580495595?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
