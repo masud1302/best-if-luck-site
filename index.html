@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BEST OF LUCK DIAMOND TOP UP</title>
   <style>
+    /* পূর্বের স্টাইল একই থাকবে */
     body {
       background-color: skyblue;
       font-family: 'Arial', sans-serif;
@@ -452,12 +453,12 @@
         return;
       }
       if (parseInt(captchaInput, 10) !== captchaAnswer) {
-        alert('ক্যাপচা ভুল হয়েছে, দয়া করে আবার চেষ্টা করুন');
+        alert('ক্যাপচা ভুল হয়েছে। আবার চেষ্টা করুন।');
         generateCaptcha();
         return;
       }
 
-      // Show spinner & disable submit button
+      // Show loading spinner & disable submit button
       loadingSpinner.style.display = 'block';
       submitBtn.disabled = true;
       submitBtn.textContent = 'অর্ডার প্রক্রিয়াধীন...';
@@ -467,7 +468,7 @@
         submitBtn.disabled = false;
         submitBtn.textContent = 'সাবমিট করুন';
 
-        // Generate order summary
+        // Generate order summary text (with newlines)
         const orderSummary =
           `অর্ডার এসেছে:\n\n` +
           `UID:\n${uid}\n\n` +
@@ -480,8 +481,22 @@
 
         thankYouMessage.textContent = 'আপনার অর্ডার সফল হয়েছে, ধন্যবাদ!';
 
-        // Show summary in payment details textarea for copy convenience
+        // Show summary in payment details textarea for easy copy
         document.getElementById('paymentDetails').value = orderSummary;
+
+        // ** WhatsApp Message Sending **
+
+        // WhatsApp phone number (বাংলাদেশের ফোন নম্বর +880 1XXXXXXXXX ফরম্যাটে)
+        const whatsappNumber = '8801580495595'; // এখানে আপনার WhatsApp নম্বর দিন
+
+        // Encode message for URL
+        const encodedMessage = encodeURIComponent(orderSummary);
+
+        // WhatsApp URL
+        const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+        // Open WhatsApp chat in new tab/window
+        window.open(whatsappURL, '_blank');
       }, 2500);
     }
   </script>
