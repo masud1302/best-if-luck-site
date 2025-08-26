@@ -5,154 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BEST OF LUCK DIAMOND TOP UP</title>
   <style>
-    body {
-      background-color: skyblue;
-      font-family: 'Arial', sans-serif;
-      text-align: center;
-      padding: 15px;
-      margin: 0;
-    }
-    .container {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      max-width: 520px;
-      margin: auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: relative;
-    }
-    input, select, textarea, button {
-      font-size: 16px;
-      box-sizing: border-box;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    input, select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-    }
-    textarea {
-      resize: none;
-      cursor: pointer;
-      font-family: monospace;
-      user-select: all;
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      height: 140px;
-    }
-    input[readonly], textarea[readonly] {
-      background-color: #f0f0f0;
-      cursor: not-allowed;
-    }
-    button {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-top: 15px;
-      padding: 12px;
-      width: 100%;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-      border-radius: 5px;
-      user-select: none;
-      position: relative;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    #totalPrice {
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 18px;
-      color: #155724;
-      background: #d4edda;
-      border: 1px solid #c3e6cb;
-      padding: 10px;
-      border-radius: 5px;
-      user-select: none;
-    }
-    #paymentDetailsContainer {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    #paymentDetails {
-      flex: 1;
-      resize: none;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      height: 140px;
-      text-align: left;
-      overflow-y: auto;
-      user-select: all;
-    }
-    #copyBtn {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      padding: 6px 12px;
-      font-size: 14px;
-      font-weight: 600;
-      height: 36px;
-      margin-top: 6px;
-      user-select: none;
-      transition: background-color 0.3s ease;
-      flex-shrink: 0;
-    }
-    #copyBtn:hover {
-      background-color: #0056b3;
-    }
-    #orderTime {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      background-color: #f0f0f0;
-      cursor: not-allowed;
-    }
-    #loadingSpinner {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #3498db;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      z-index: 10;
-    }
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg);}
-      100% { transform: translate(-50%, -50%) rotate(360deg);}
-    }
+    body { background-color: skyblue; font-family: 'Arial', sans-serif; text-align: center; padding: 15px; margin: 0; }
+    .container { background: white; border-radius: 10px; padding: 20px; max-width: 520px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
+    input, select, textarea, button { font-size: 16px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc; }
+    input, select { width: 100%; padding: 12px; margin-top: 10px; }
+    textarea { resize: none; cursor: pointer; font-family: monospace; user-select: all; width: 100%; padding: 10px; margin-top: 10px; height: 140px; }
+    input[readonly], textarea[readonly] { background-color: #f0f0f0; cursor: not-allowed; }
+    button { background-color: #28a745; color: white; border: none; cursor: pointer; margin-top: 15px; padding: 12px; width: 100%; font-size: 16px; transition: background-color 0.3s ease; border-radius: 5px; user-select: none; position: relative; }
+    button:hover { background-color: #218838; }
+    #totalPrice { margin-top: 15px; font-weight: bold; font-size: 18px; color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; user-select: none; }
+    #paymentDetailsContainer { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; }
+    #paymentDetails { flex: 1; resize: none; padding: 10px; font-family: monospace; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; height: 140px; text-align: left; overflow-y: auto; user-select: all; cursor: pointer; }
+    #orderTime { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; background-color: #f0f0f0; cursor: not-allowed; }
+    #loadingSpinner { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 10; }
+    @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg);} 100% { transform: translate(-50%, -50%) rotate(360deg);} }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>BEST OF LUCK DIAMOND TOP UP</h2>
-
     <p>আপনার ফ্রি ফায়ার UID লিখুন:</p>
     <input type="text" id="uid" placeholder="UID (শুধু ৯-১১ সংখ্যার)" maxlength="11"
       oninput="this.value=this.value.replace(/[^0-9]/g,'')" autocomplete="off" required />
-
     <p>গেমে কি নাম দেয়া আছে?</p>
     <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" autocomplete="off" required />
-
     <p>প্যাকেজ সিলেক্ট করুন:</p>
     <select id="diamondSelect" multiple size="15" required onchange="calculateTotal()">
       <option data-price="25">25 Diamond = 25 BDT</option>
@@ -185,28 +61,22 @@
       <option data-price="107">7 Days Evo Access = 107 BDT</option>
       <option data-price="308">30 Days Evo Access = 308 BDT</option>
     </select>
-
     <div id="totalPrice">মোট দাম: 0 BDT</div>
-
     <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
     <select id="paymentMethod" required onchange="showPaymentDetails()">
       <option value="" disabled selected>-- নির্বাচন করুন --</option>
-      <option value="Bkash/Nagad">Bkash/Nagad = 01580495595</option>
-      <option value="Rocket">Rocket = 01316019861</option>
-      <option value="Upay">Upay = 01316019861</option>
+      <option value="Bkash/Nagad">Bkash/Nagad</option>
+      <option value="Rocket">Rocket</option>
+      <option value="Upay">Upay</option>
       <option value="Dhaka Bank">Dhaka Bank</option>
       <option value="UCB Bank">UCB Bank</option>
       <option value="IFIC Bank">IFIC Bank</option>
     </select>
-
     <div id="paymentDetailsContainer">
-      <div id="paymentDetails"></div>
-      <button id="copyBtn" onclick="copyPaymentDetails()">কপি</button>
+      <div id="paymentDetails" onclick="copyPaymentDetails()"></div>
     </div>
-
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
-
     <button id="submitBtn" onclick="submitOrder()">সাবমিট করুন</button>
     <div id="loadingSpinner"></div>
   </div>
@@ -216,8 +86,7 @@
 
     function updateTime() {
       const now = new Date();
-      const options = { timeZone: 'Asia/Dhaka', year:'numeric',month:'long',day:'numeric',
-        hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
+      const options = { timeZone: 'Asia/Dhaka', year:'numeric',month:'long',day:'numeric', hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
       document.getElementById('orderTime').value = now.toLocaleString('bn-BD',options);
     }
     setInterval(updateTime,1000);
@@ -234,36 +103,16 @@
     function showPaymentDetails(){
       const pm=document.getElementById('paymentMethod').value;
       const pd=document.getElementById('paymentDetails');
-      let html='';
       let number='';
       switch(pm){
-        case 'Bkash/Nagad': 
-          html='<img src="https://upload.wikimedia.org/wikipedia/commons/3/33/BKash_Logo.svg" width="20" style="vertical-align:middle;"> বিকাশ নম্বর: 01580495595<br>'+
-               '<img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Nagad_Logo.svg" width="20" style="vertical-align:middle;"> নগদ নম্বর: 01580495595';
-          number='01580495595';
-          break;
-        case 'Rocket': 
-          html='<img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Rocket_Bangladesh_logo.png" width="20" style="vertical-align:middle;"> Rocket নম্বর: 01316019861';
-          number='01316019861';
-          break;
-        case 'Upay': 
-          html='<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Upay_logo.png" width="20" style="vertical-align:middle;"> Upay নম্বর: 01316019861';
-          number='01316019861';
-          break;
-        case 'Dhaka Bank': 
-          html='<img src="https://upload.wikimedia.org/wikipedia/en/3/3b/Dhaka_Bank_logo.png" width="20" style="vertical-align:middle;"> Dhaka Bank<br>নাম: MD MAHFUZUL ISLAM<br>একাউন্ট নাম্বার: 4111100035349<br>ব্রাঞ্চ: Bogura';
-          number='4111100035349';
-          break;
-        case 'UCB Bank': 
-          html='<img src="https://upload.wikimedia.org/wikipedia/en/0/0f/UCB_Bank_Logo.png" width="20" style="vertical-align:middle;"> UCB Bank<br>নাম: PREMIUM CYBER GALAXY<br>একাউন্ট নাম্বার: 0072101000007006<br>ব্রাঞ্চ: -';
-          number='0072101000007006';
-          break;
-        case 'IFIC Bank': 
-          html='<img src="https://upload.wikimedia.org/wikipedia/en/1/1b/IFIC_Bank_logo.png" width="20" style="vertical-align:middle;"> IFIC Bank<br>নাম: MD MAHFUZUL ISLAM<br>একাউন্ট নাম্বার: 0230107830851<br>ব্রাঞ্চ: Bogura';
-          number='0230107830851';
-          break;
+        case 'Bkash/Nagad': number='01580495595'; break;
+        case 'Rocket': number='01316019861'; break;
+        case 'Upay': number='01316019861'; break;
+        case 'Dhaka Bank': number='4111100035349'; break;
+        case 'UCB Bank': number='0072101000007006'; break;
+        case 'IFIC Bank': number='0230107830851'; break;
       }
-      pd.innerHTML = html;
+      pd.textContent = number;
       pd.dataset.number = number;
     }
 
@@ -275,6 +124,7 @@
       el.select();
       document.execCommand('copy');
       document.body.removeChild(el);
+      alert('নম্বর কপি হয়েছে: ' + el.value);
     }
 
     function submitOrder(){
@@ -287,10 +137,16 @@
       const time=document.getElementById('orderTime').value;
       const total=calculateTotal();
       if(!uid||!/^\d{9,11}$/.test(uid)||!name||diamondSelect.selectedOptions.length===0||!pm||!pd||total<=0) return;
+
       loadingSpinner.style.display='block';
+      const start = Date.now();
+
       const msg=`✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ:\n${selectedDiamonds}\n💰 মোট দাম: ${total} BDT\n💳 পেমেন্ট মেথড: ${pm}\n📋 পেমেন্ট ডিটেইলস:\n${pd}\n⏰ অর্ডারের সময়: ${time}`;
       window.open(`https://wa.me/8801580495595?text=${encodeURIComponent(msg)}`,'_blank');
-      setTimeout(()=>{loadingSpinner.style.display='none';clearForm();},1000);
+
+      const minTime = 1500; // ন্যূনতম ১.৫ সেকেন্ড
+      const elapsed = Date.now() - start;
+      setTimeout(()=>{loadingSpinner.style.display='none';clearForm();}, Math.max(minTime - elapsed, 0));
     }
 
     function clearForm(){
@@ -299,7 +155,7 @@
       const ds=document.getElementById('diamondSelect');
       for(const o of ds.options)o.selected=false;
       document.getElementById('paymentMethod').value='';
-      document.getElementById('paymentDetails').innerHTML='';
+      document.getElementById('paymentDetails').textContent='';
       document.getElementById('paymentDetails').dataset.number='';
       document.getElementById('totalPrice').textContent='মোট দাম: 0 BDT';
     }
