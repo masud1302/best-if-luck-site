@@ -16,11 +16,12 @@
     #totalPrice { margin-top: 15px; font-weight: bold; font-size: 18px; color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; user-select: none; }
     #paymentDetailsContainer { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; }
     #paymentDetails { flex: 1; resize: none; padding: 10px; font-family: monospace; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; height: 140px; text-align: left; overflow-y: auto; user-select: all; cursor: pointer; }
+    #paymentInstruction { font-size: 14px; color: #333; margin-top: 5px; text-align: left; }
     #orderTime { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; background-color: #f0f0f0; cursor: not-allowed; }
     #loadingSpinner { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 10; }
     @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg);} 100% { transform: translate(-50%, -50%) rotate(360deg);} }
 
-    /* নতুন CSS: ফাঁকা বা সিলেকশন না করা ফিল্ডের জন্য */
+    /* ফাঁকা বা সিলেকশন না করা ফিল্ডের জন্য */
     .invalid { border: 2px solid red !important; }
   </style>
 </head>
@@ -78,6 +79,7 @@
     <div id="paymentDetailsContainer">
       <div id="paymentDetails" onclick="copyPaymentDetails()"></div>
     </div>
+    <p id="paymentInstruction"></p>
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
     <button id="submitBtn" onclick="submitOrder()">সাবমিট করুন</button>
@@ -104,9 +106,11 @@
     }
 
     function showPaymentDetails(){
-      const pm=document.getElementById('paymentMethod').value;
-      const pd=document.getElementById('paymentDetails');
+      const pm = document.getElementById('paymentMethod').value;
+      const pd = document.getElementById('paymentDetails');
+      const instruction = document.getElementById('paymentInstruction');
       let number='';
+
       switch(pm){
         case 'Bkash/Nagad': number='01580495595'; break;
         case 'Rocket': number='01316019861'; break;
@@ -115,8 +119,15 @@
         case 'UCB Bank': number='0072101000007006'; break;
         case 'IFIC Bank': number='0230107830851'; break;
       }
+
       pd.textContent = number;
       pd.dataset.number = number;
+
+      if(pm){
+        instruction.textContent = `নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`;
+      } else {
+        instruction.textContent = '';
+      }
     }
 
     function copyPaymentDetails(){
@@ -138,7 +149,6 @@
       const pd = document.getElementById('paymentDetails').dataset.number || '';
       const total = calculateTotal();
 
-      // সব ফিল্ডের বর্ডার ডিফল্ট করে দিচ্ছি
       [uid, name, diamondSelect, paymentMethod].forEach(el => el.classList.remove('invalid'));
 
       let valid = true;
@@ -179,6 +189,7 @@
       document.getElementById('paymentMethod').value='';
       document.getElementById('paymentDetails').textContent='';
       document.getElementById('paymentDetails').dataset.number='';
+      document.getElementById('paymentInstruction').textContent='';
       document.getElementById('totalPrice').textContent='মোট দাম: 0 BDT';
     }
   </script>
