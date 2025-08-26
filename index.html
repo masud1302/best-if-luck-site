@@ -1,3 +1,5 @@
+M A S U D
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -11,14 +13,14 @@
     input, select { width: 100%; padding: 12px; margin-top: 10px; }
     textarea { resize: none; cursor: pointer; font-family: monospace; user-select: all; width: 100%; padding: 10px; margin-top: 10px; height: 140px; }
     input[readonly], textarea[readonly] { background-color: #f0f0f0; cursor: not-allowed; }
-    button { background-color: #28a745; color: white; border: none; cursor: pointer; margin-top: 15px; padding: 12px; width: 100%; font-size: 16px; transition: background-color 0.3s ease; border-radius: 5px; user-select: none; position: relative; }
-    button:hover { background-color: #218838; }
     #totalPrice { margin-top: 15px; font-weight: bold; font-size: 18px; color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; user-select: none; }
-    #paymentDetailsContainer { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; }
-    #paymentDetails { flex: 1; resize: none; padding: 10px; font-family: monospace; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; height: 140px; text-align: left; overflow-y: auto; user-select: all; cursor: pointer; }
+    #paymentDetailsContainer { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+    #paymentDetails { flex: 1; padding: 10px; font-family: monospace; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; height: 40px; text-align: left; overflow-y: auto; user-select: all; cursor: pointer; background-color: #f9f9f9; }
+    #paymentHint { font-size: 13px; color: #555; text-align: left; margin-top: 2px; }
     #orderTime { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; background-color: #f0f0f0; cursor: not-allowed; }
     #loadingSpinner { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 10; }
     @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg);} 100% { transform: translate(-50%, -50%) rotate(360deg);} }
+    #copyNotification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #28a745; color: white; padding: 8px 16px; border-radius: 5px; display: none; font-size: 14px; z-index: 1000; }
   </style>
 </head>
 <body>
@@ -74,6 +76,7 @@
     </select>
     <div id="paymentDetailsContainer">
       <div id="paymentDetails" onclick="copyPaymentDetails()"></div>
+      <div id="paymentHint"></div>
     </div>
     <p>অর্ডারের সময় ও তারিখ:</p>
     <input type="text" id="orderTime" readonly />
@@ -81,8 +84,11 @@
     <div id="loadingSpinner"></div>
   </div>
 
+  <div id="copyNotification">নম্বর কপি হয়েছে!</div>
+
   <script>
     const loadingSpinner = document.getElementById('loadingSpinner');
+    const copyNotification = document.getElementById('copyNotification');
 
     function updateTime() {
       const now = new Date();
@@ -103,17 +109,20 @@
     function showPaymentDetails(){
       const pm=document.getElementById('paymentMethod').value;
       const pd=document.getElementById('paymentDetails');
+      const hint=document.getElementById('paymentHint');
       let number='';
+      let hintText='';
       switch(pm){
-        case 'Bkash/Nagad': number='01580495595'; break;
-        case 'Rocket': number='01316019861'; break;
-        case 'Upay': number='01316019861'; break;
-        case 'Dhaka Bank': number='4111100035349'; break;
-        case 'UCB Bank': number='0072101000007006'; break;
-        case 'IFIC Bank': number='0230107830851'; break;
+        case 'Bkash/Nagad': number='01580495595'; hintText=`নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`; break;
+        case 'Rocket': number='01316019861'; hintText=`নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`; break;
+        case 'Upay': number='01316019861'; hintText=`নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`; break;
+        case 'Dhaka Bank': number='4111100035349'; hintText=`নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`; break;
+        case 'UCB Bank': number='0072101000007006'; hintText=`নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`; break;
+        case 'IFIC Bank': number='0230107830851'; hintText=`নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`; break;
       }
       pd.textContent = number;
       pd.dataset.number = number;
+      hint.textContent = hintText;
     }
 
     function copyPaymentDetails(){
@@ -124,7 +133,8 @@
       el.select();
       document.execCommand('copy');
       document.body.removeChild(el);
-      alert('নম্বর কপি হয়েছে: ' + el.value);
+      copyNotification.style.display='block';
+      setTimeout(()=>{copyNotification.style.display='none';},1500);
     }
 
     function submitOrder(){
@@ -144,7 +154,7 @@
       const msg=`✅ অর্ডার এসেছে:\n🆔 UID: ${uid}\n👤 নাম: ${name}\n💎 প্যাকেজ:\n${selectedDiamonds}\n💰 মোট দাম: ${total} BDT\n💳 পেমেন্ট মেথড: ${pm}\n📋 পেমেন্ট ডিটেইলস:\n${pd}\n⏰ অর্ডারের সময়: ${time}`;
       window.open(`https://wa.me/8801580495595?text=${encodeURIComponent(msg)}`,'_blank');
 
-      const minTime = 1500; // ন্যূনতম ১.৫ সেকেন্ড
+      const minTime = 1500;
       const elapsed = Date.now() - start;
       setTimeout(()=>{loadingSpinner.style.display='none';clearForm();}, Math.max(minTime - elapsed, 0));
     }
@@ -157,6 +167,7 @@
       document.getElementById('paymentMethod').value='';
       document.getElementById('paymentDetails').textContent='';
       document.getElementById('paymentDetails').dataset.number='';
+      document.getElementById('paymentHint').textContent='';
       document.getElementById('totalPrice').textContent='মোট দাম: 0 BDT';
     }
   </script>
