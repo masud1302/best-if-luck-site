@@ -89,6 +89,8 @@
       border-radius: 6px;
       border: 1px solid #ccc;
       height: 140px;
+      text-align: left;
+      overflow-y: auto;
       user-select: all;
     }
     #copyBtn {
@@ -167,7 +169,6 @@
       <option data-price="1567">2530 Diamond = 1567 BDT</option>
       <option data-price="3124">5060 Diamond = 3124 BDT</option>
       <option data-price="6240">10120 Diamond = 6240 BDT</option>
-      <!-- Level Up Packages -->
       <option data-price="390">Level Up Pass = 390 BDT</option>
       <option data-price="768">Monthly = 768 BDT</option>
       <option data-price="1530">Monthly 2x = 1530 BDT</option>
@@ -199,7 +200,7 @@
     </select>
 
     <div id="paymentDetailsContainer">
-      <textarea id="paymentDetails" readonly placeholder="পেমেন্ট ডিটেইল এখানে দেখাবে"></textarea>
+      <div id="paymentDetails"></div>
       <button id="copyBtn" onclick="copyPaymentDetails()">কপি</button>
     </div>
 
@@ -233,23 +234,47 @@
     function showPaymentDetails(){
       const pm=document.getElementById('paymentMethod').value;
       const pd=document.getElementById('paymentDetails');
-      let text='';
+      let html='';
+      let number='';
       switch(pm){
-        case 'Bkash/Nagad': text='Bkash/Nagad নম্বর:\n01580495595'; break;
-        case 'Rocket': text='Rocket নম্বর:\n01316019861'; break;
-        case 'Upay': text='Upay নম্বর:\n01316019861'; break;
-        case 'Dhaka Bank': text='Dhaka Bank\nনাম: MD MAHFUZUL ISLAM\nএকাউন্ট নাম্বার: 4111100035349\nব্রাঞ্চ: Bogura'; break;
-        case 'UCB Bank': text='UCB Bank\nনাম: PREMIUM CYBER GALAXY\nএকাউন্ট নাম্বার: 0072101000007006\nব্রাঞ্চ: -'; break;
-        case 'IFIC Bank': text='IFIC Bank\nনাম: MD MAHFUZUL ISLAM\nএকাউন্ট নাম্বার: 0230107830851\nব্রাঞ্চ: Bogura'; break;
+        case 'Bkash/Nagad': 
+          html='<img src="https://upload.wikimedia.org/wikipedia/commons/3/33/BKash_Logo.svg" width="20" style="vertical-align:middle;"> বিকাশ নম্বর: 01580495595<br>'+
+               '<img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Nagad_Logo.svg" width="20" style="vertical-align:middle;"> নগদ নম্বর: 01580495595';
+          number='01580495595';
+          break;
+        case 'Rocket': 
+          html='<img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Rocket_Bangladesh_logo.png" width="20" style="vertical-align:middle;"> Rocket নম্বর: 01316019861';
+          number='01316019861';
+          break;
+        case 'Upay': 
+          html='<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Upay_logo.png" width="20" style="vertical-align:middle;"> Upay নম্বর: 01316019861';
+          number='01316019861';
+          break;
+        case 'Dhaka Bank': 
+          html='<img src="https://upload.wikimedia.org/wikipedia/en/3/3b/Dhaka_Bank_logo.png" width="20" style="vertical-align:middle;"> Dhaka Bank<br>নাম: MD MAHFUZUL ISLAM<br>একাউন্ট নাম্বার: 4111100035349<br>ব্রাঞ্চ: Bogura';
+          number='4111100035349';
+          break;
+        case 'UCB Bank': 
+          html='<img src="https://upload.wikimedia.org/wikipedia/en/0/0f/UCB_Bank_Logo.png" width="20" style="vertical-align:middle;"> UCB Bank<br>নাম: PREMIUM CYBER GALAXY<br>একাউন্ট নাম্বার: 0072101000007006<br>ব্রাঞ্চ: -';
+          number='0072101000007006';
+          break;
+        case 'IFIC Bank': 
+          html='<img src="https://upload.wikimedia.org/wikipedia/en/1/1b/IFIC_Bank_logo.png" width="20" style="vertical-align:middle;"> IFIC Bank<br>নাম: MD MAHFUZUL ISLAM<br>একাউন্ট নাম্বার: 0230107830851<br>ব্রাঞ্চ: Bogura';
+          number='0230107830851';
+          break;
       }
-      pd.value=text;
+      pd.innerHTML = html;
+      pd.dataset.number = number;
     }
 
     function copyPaymentDetails(){
       const pd=document.getElementById('paymentDetails');
-      pd.select();
-      pd.setSelectionRange(0,99999);
-      navigator.clipboard.writeText(pd.value);
+      const el = document.createElement('textarea');
+      el.value = pd.dataset.number || '';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
     }
 
     function submitOrder(){
@@ -258,7 +283,7 @@
       const diamondSelect=document.getElementById('diamondSelect');
       const selectedDiamonds=Array.from(diamondSelect.selectedOptions).map(o=>`- ${o.text}`).join('\n');
       const pm=document.getElementById('paymentMethod').value;
-      const pd=document.getElementById('paymentDetails').value;
+      const pd=document.getElementById('paymentDetails').dataset.number || '';
       const time=document.getElementById('orderTime').value;
       const total=calculateTotal();
       if(!uid||!/^\d{9,11}$/.test(uid)||!name||diamondSelect.selectedOptions.length===0||!pm||!pd||total<=0) return;
@@ -274,7 +299,8 @@
       const ds=document.getElementById('diamondSelect');
       for(const o of ds.options)o.selected=false;
       document.getElementById('paymentMethod').value='';
-      document.getElementById('paymentDetails').value='';
+      document.getElementById('paymentDetails').innerHTML='';
+      document.getElementById('paymentDetails').dataset.number='';
       document.getElementById('totalPrice').textContent='মোট দাম: 0 BDT';
     }
   </script>
