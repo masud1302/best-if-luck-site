@@ -1,198 +1,491 @@
-M A S U D
+<script>
 
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BEST OF LUCK DIAMOND TOP UP</title>
-  <style>
-    body { background-color: skyblue; font-family: 'Arial', sans-serif; text-align: center; padding: 15px; margin: 0; }
-    .container { background: white; border-radius: 10px; padding: 20px; max-width: 520px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
-    input, select, textarea, button { font-size: 16px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc; }
-    input, select { width: 100%; padding: 12px; margin-top: 10px; }
-    textarea { resize: none; cursor: pointer; font-family: monospace; user-select: all; width: 100%; padding: 10px; margin-top: 10px; height: 140px; }
-    input[readonly], textarea[readonly] { background-color: #f0f0f0; cursor: not-allowed; }
-    button { background-color: #28a745; color: white; border: none; cursor: pointer; margin-top: 15px; padding: 12px; width: 100%; font-size: 16px; transition: background-color 0.3s ease; border-radius: 5px; user-select: none; position: relative; }
-    button:hover { background-color: #218838; }
-    #totalPrice { margin-top: 15px; font-weight: bold; font-size: 18px; color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; user-select: none; }
-    #paymentDetailsContainer { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; }
-    #paymentDetails { flex: 1; resize: none; padding: 10px; font-family: monospace; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; height: 140px; text-align: left; overflow-y: auto; user-select: all; cursor: pointer; }
-    #paymentInstruction { font-size: 14px; color: #333; margin-top: 5px; text-align: left; font-weight: bold; }
-    #orderTime { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; background-color: #f0f0f0; cursor: not-allowed; }
-    #loadingSpinner { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 10; }
-    @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg);} 100% { transform: translate(-50%, -50%) rotate(360deg);} }
 
-    .invalid { border: 2px solid red !important; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>BEST OF LUCK DIAMOND TOP UP</h2>
-    <p>আপনার ফ্রি ফায়ার UID লিখুন:</p>
-    <input type="text" id="uid" placeholder="UID (শুধু ৯-১১ সংখ্যার)" maxlength="11"
-      oninput="this.value=this.value.replace(/[^0-9]/g,'')" autocomplete="off" required />
-    <p>গেমে কি নাম দেয়া আছে?</p>
-    <input type="text" id="playerName" placeholder="আপনার গেম নাম এখানে লিখুন" autocomplete="off" required />
-    <p>প্যাকেজ সিলেক্ট করুন:</p>
-    <select id="diamondSelect" multiple size="15" required onchange="calculateTotal()">
-      <option data-price="25">25 Diamond = 25 BDT</option>
-      <option data-price="40">50 Diamond = 40 BDT</option>
-      <option data-price="82">115 Diamond = 82 BDT</option>
-      <option data-price="160">240 Diamond = 160 BDT</option>
-      <option data-price="240">355 Diamond = 240 BDT</option>
-      <option data-price="316">480 Diamond = 316 BDT</option>
-      <option data-price="340">505 Diamond = 340 BDT</option>
-      <option data-price="392">610 Diamond = 392 BDT</option>
-      <option data-price="550">850 Diamond = 550 BDT</option>
-      <option data-price="700">1090 Diamond = 700 BDT</option>
-      <option data-price="775">1240 Diamond = 775 BDT</option>
-      <option data-price="1567">2530 Diamond = 1567 BDT</option>
-      <option data-price="3124">5060 Diamond = 3124 BDT</option>
-      <option data-price="6240">10120 Diamond = 6240 BDT</option>
-      <option data-price="390">Level Up Pass = 390 BDT</option>
-      <option data-price="768">Monthly = 768 BDT</option>
-      <option data-price="1530">Monthly 2x = 1530 BDT</option>
-      <option data-price="165">Weekly = 165 BDT</option>
-      <option data-price="325">Weekly 2x = 325 BDT</option>
-      <option data-price="485">Weekly 3x = 485 BDT</option>
-      <option data-price="630">Weekly 4x = 630 BDT</option>
-      <option data-price="785">Weekly 5x = 785 BDT</option>
-      <option data-price="43">Weekly Lite = 43 BDT</option>
-      <option data-price="85">2X Weekly Lite = 85 BDT</option>
-      <option data-price="127">3X Weekly Lite = 127 BDT</option>
-      <option data-price="210">5X Weekly Lite = 210 BDT</option>
-      <option data-price="70">3 Days Evo Access = 70 BDT</option>
-      <option data-price="107">7 Days Evo Access = 107 BDT</option>
-      <option data-price="308">30 Days Evo Access = 308 BDT</option>
-    </select>
-    <div id="totalPrice">মোট দাম: 0 BDT</div>
-    <p>পেমেন্ট মেথড সিলেক্ট করুন:</p>
-    <select id="paymentMethod" required onchange="showPaymentDetails()">
-      <option value="" disabled selected>-- নির্বাচন করুন --</option>
-      <option value="Bkash/Nagad">Bkash/Nagad</option>
-      <option value="Rocket">Rocket</option>
-      <option value="Upay">Upay</option>
-      <option value="Dhaka Bank">Dhaka Bank</option>
-      <option value="UCB Bank">UCB Bank</option>
-      <option value="IFIC Bank">IFIC Bank</option>
-    </select>
-    <div id="paymentDetailsContainer">
-      <div id="paymentDetails" onclick="copyPaymentDetails()"></div>
-    </div>
-    <p id="paymentInstruction"></p>
-    <p>অর্ডারের সময় ও তারিখ:</p>
-    <input type="text" id="orderTime" readonly />
-    <button id="submitBtn" onclick="submitOrder()">সাবমিট করুন</button>
-    <div id="loadingSpinner"></div>
-  </div>
+const loadingSpinner = document.getElementById("loadingSpinner");
 
-  <script>
-    const loadingSpinner = document.getElementById('loadingSpinner');
 
-    function updateTime() {
-      const now = new Date();
-      const options = { timeZone: 'Asia/Dhaka', year:'numeric',month:'long',day:'numeric', hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false};
-      document.getElementById('orderTime').value = now.toLocaleString('bn-BD',options);
-    }
-    setInterval(updateTime,1000);
-    updateTime();
 
-    function calculateTotal(){
-      const diamondSelect=document.getElementById('diamondSelect');
-      let total=0;
-      for(const option of diamondSelect.selectedOptions){ total+=parseInt(option.getAttribute('data-price'),10)||0; }
-      document.getElementById('totalPrice').textContent=`মোট দাম: ${total} BDT`;
-      return total;
-    }
+// ================= TIME =================
 
-    function showPaymentDetails(){
-      const pm = document.getElementById('paymentMethod').value;
-      const pd = document.getElementById('paymentDetails');
-      const instruction = document.getElementById('paymentInstruction');
-      let number='';
 
-      switch(pm){
-        case 'Bkash/Nagad': number='01580495595'; break;
-        case 'Rocket': number='01316019861'; break;
-        case 'Upay': number='01316019861'; break;
-        case 'Dhaka Bank': number='4111100035349'; break;
-        case 'UCB Bank': number='0072101000007006'; break;
-        case 'IFIC Bank': number='0230107830851'; break;
-      }
+function updateTime(){
 
-      pd.textContent = number;
-      pd.dataset.number = number;
+    const now = new Date();
 
-      if(pm){
-        instruction.textContent = `নাম্বারে ক্লিক করে, কপি করুন ${pm} এ সেন্ড মানি করার জন্য।`;
-      } else {
-        instruction.textContent = '';
-      }
+    const options = {
+
+        timeZone:"Asia/Dhaka",
+
+        year:"numeric",
+
+        month:"long",
+
+        day:"numeric",
+
+        hour:"2-digit",
+
+        minute:"2-digit",
+
+        second:"2-digit",
+
+        hour12:false
+
+    };
+
+
+    document.getElementById("orderTime").value =
+    now.toLocaleString("bn-BD", options);
+
+}
+
+
+setInterval(updateTime,1000);
+
+updateTime();
+
+
+
+
+
+// ================= TOTAL PRICE =================
+
+
+function calculateTotal(){
+
+    const select =
+    document.getElementById("diamondSelect");
+
+
+    let total = 0;
+
+
+    Array.from(select.selectedOptions).forEach(option=>{
+
+        total += Number(option.dataset.price) || 0;
+
+    });
+
+
+    document.getElementById("totalPrice").innerText =
+    `মোট দাম: ${total} BDT`;
+
+
+    return total;
+
+}
+
+
+
+
+
+// ================= PAYMENT =================
+
+
+
+function showPaymentDetails(){
+
+
+    const method =
+    document.getElementById("paymentMethod").value;
+
+
+    const details =
+    document.getElementById("paymentDetails");
+
+
+    const instruction =
+    document.getElementById("paymentInstruction");
+
+
+
+    let number="";
+
+
+
+    if(method==="Bkash/Nagad"){
+
+        number="01580495595";
+
     }
 
-    function copyPaymentDetails(){
-      const pd=document.getElementById('paymentDetails');
-      const el = document.createElement('textarea');
-      el.value = pd.dataset.number || '';
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      alert('নম্বর কপি হয়েছে: ' + el.value);
+    else if(method==="Rocket"){
+
+        number="01316019861";
+
     }
 
-    function submitOrder() {
-      const uid = document.getElementById('uid');
-      const name = document.getElementById('playerName');
-      const diamondSelect = document.getElementById('diamondSelect');
-      const paymentMethod = document.getElementById('paymentMethod');
-      const pd = document.getElementById('paymentDetails').dataset.number || '';
-      const total = calculateTotal();
+    else if(method==="Upay"){
 
-      [uid, name, diamondSelect, paymentMethod].forEach(el => el.classList.remove('invalid'));
+        number="01316019861";
 
-      let valid = true;
+    }
 
-      if(!uid.value || !/^\d{9,11}$/.test(uid.value)) { uid.classList.add('invalid'); valid = false; }
-      if(!name.value.trim()) { name.classList.add('invalid'); valid = false; }
-      if(diamondSelect.selectedOptions.length === 0) { diamondSelect.classList.add('invalid'); valid = false; }
-      if(!paymentMethod.value) { paymentMethod.classList.add('invalid'); valid = false; }
-      if(!pd || total <= 0) { valid = false; }
+    else if(method==="Dhaka Bank"){
 
-      if(!valid) {
-        alert('দয়া করে লাল চিহ্নিত ফিল্ডগুলো পূরণ করুন।');
+        number="4111100035349";
+
+    }
+
+    else if(method==="UCB Bank"){
+
+        number="0072101000007006";
+
+    }
+
+    else if(method==="IFIC Bank"){
+
+        number="0230107830851";
+
+    }
+
+
+
+    details.innerText = number;
+
+    details.dataset.number = number;
+
+
+
+    if(number){
+
+        instruction.innerText =
+        `নাম্বারে ক্লিক করে কপি করুন এবং ${method} এ Send Money করুন।`;
+
+    }
+
+    else{
+
+        instruction.innerText="";
+
+    }
+
+
+}
+
+
+
+
+
+
+
+// ================= COPY SYSTEM =================
+
+
+
+async function copyPaymentDetails(){
+
+
+    const number =
+    document.getElementById("paymentDetails").dataset.number;
+
+
+
+    if(!number){
+
+        alert("আগে পেমেন্ট মেথড নির্বাচন করুন");
+
         return;
-      }
 
-      const selectedDiamonds = Array.from(diamondSelect.selectedOptions).map(o => `- ${o.text}`).join('\n');
-      const time = document.getElementById('orderTime').value;
-
-      loadingSpinner.style.display = 'block';
-      const start = Date.now();
-
-      const msg = `✅ অর্ডার এসেছে:\n🆔 UID: ${uid.value}\n👤 নাম: ${name.value}\n💎 প্যাকেজ:\n${selectedDiamonds}\n💰 মোট দাম: ${total} BDT\n💳 পেমেন্ট মেথড: ${paymentMethod.value}\n📋 পেমেন্ট ডিটেইলস:\n${pd}\n⏰ অর্ডারের সময়: ${time}`;
-      window.open(`https://wa.me/8801580495595?text=${encodeURIComponent(msg)}`, '_blank');
-
-      const minTime = 1500;
-      const elapsed = Date.now() - start;
-      setTimeout(() => {
-        loadingSpinner.style.display = 'none';
-        clearForm();
-      }, Math.max(minTime - elapsed, 0));
     }
 
-    function clearForm(){
-      document.getElementById('uid').value='';
-      document.getElementById('playerName').value='';
-      const ds=document.getElementById('diamondSelect');
-      for(const o of ds.options)o.selected=false;
-      document.getElementById('paymentMethod').value='';
-      document.getElementById('paymentDetails').textContent='';
-      document.getElementById('paymentDetails').dataset.number='';
-      document.getElementById('paymentInstruction').textContent='';
-      document.getElementById('totalPrice').textContent='মোট দাম: 0 BDT';
+
+
+    try{
+
+
+        await navigator.clipboard.writeText(number);
+
+
+        alert("নম্বর কপি হয়েছে: " + number);
+
+
     }
-  </script>
-</body>
-</html>
+
+
+    catch(error){
+
+
+        const temp =
+        document.createElement("textarea");
+
+
+        temp.value = number;
+
+
+        document.body.appendChild(temp);
+
+
+        temp.select();
+
+
+        document.execCommand("copy");
+
+
+        document.body.removeChild(temp);
+
+
+
+        alert("নম্বর কপি হয়েছে: " + number);
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
+// ================= SUBMIT ORDER =================
+
+
+
+function submitOrder(){
+
+
+
+    const uid =
+    document.getElementById("uid");
+
+
+    const name =
+    document.getElementById("playerName");
+
+
+    const packageSelect =
+    document.getElementById("diamondSelect");
+
+
+    const payment =
+    document.getElementById("paymentMethod");
+
+
+    const paymentNumber =
+    document.getElementById("paymentDetails").dataset.number || "";
+
+
+
+    const total = calculateTotal();
+
+
+
+
+    [
+        uid,
+        name,
+        packageSelect,
+        payment
+
+    ].forEach(field=>{
+
+        field.classList.remove("invalid");
+
+    });
+
+
+
+
+    let valid=true;
+
+
+
+    if(!/^\d{9,11}$/.test(uid.value)){
+
+
+        uid.classList.add("invalid");
+
+        valid=false;
+
+    }
+
+
+
+    if(!name.value.trim()){
+
+
+        name.classList.add("invalid");
+
+        valid=false;
+
+
+    }
+
+
+
+    if(packageSelect.selectedOptions.length===0){
+
+
+        packageSelect.classList.add("invalid");
+
+        valid=false;
+
+
+    }
+
+
+
+
+    if(!payment.value){
+
+
+        payment.classList.add("invalid");
+
+        valid=false;
+
+
+    }
+
+
+
+
+
+    if(!paymentNumber || total<=0){
+
+
+        valid=false;
+
+
+    }
+
+
+
+
+
+    if(!valid){
+
+
+        alert("দয়া করে লাল চিহ্নিত ঘরগুলো পূরণ করুন।");
+
+        return;
+
+
+    }
+
+
+
+
+
+
+
+    const selectedPackages =
+    Array.from(packageSelect.selectedOptions)
+
+    .map(item=>"- "+item.text)
+
+    .join("\n");
+
+
+
+
+
+    const message =
+
+`✅ নতুন অর্ডার
+
+🆔 UID:
+${uid.value}
+
+👤 নাম:
+${name.value}
+
+💎 প্যাকেজ:
+${selectedPackages}
+
+💰 মোট:
+${total} BDT
+
+💳 Payment:
+${payment.value}
+
+📋 Number:
+${paymentNumber}
+
+⏰ সময়:
+${document.getElementById("orderTime").value}`;
+
+
+
+
+
+    loadingSpinner.style.display="block";
+
+
+
+
+    const whatsappURL =
+
+    "https://wa.me/8801580495595?text="
+
+    + encodeURIComponent(message);
+
+
+
+
+    setTimeout(()=>{
+
+
+        window.location.href = whatsappURL;
+
+
+        loadingSpinner.style.display="none";
+
+
+    },500);
+
+
+
+}
+
+
+
+
+
+
+
+// ================= CLEAR FORM =================
+
+
+function clearForm(){
+
+
+document.getElementById("uid").value="";
+
+document.getElementById("playerName").value="";
+
+
+
+const select =
+document.getElementById("diamondSelect");
+
+
+Array.from(select.options).forEach(option=>{
+
+    option.selected=false;
+
+});
+
+
+
+document.getElementById("paymentMethod").value="";
+
+document.getElementById("paymentDetails").innerText="";
+
+document.getElementById("paymentDetails").dataset.number="";
+
+document.getElementById("paymentInstruction").innerText="";
+
+
+document.getElementById("totalPrice").innerText=
+"মোট দাম: 0 BDT";
+
+
+}
+
+
+
+
+</script>
